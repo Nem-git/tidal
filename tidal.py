@@ -19,12 +19,6 @@ def query_song(query):
     joined = {}
     for parts in response:
         joined.update(parts)
-
-    with open("file.flac", "wb") as f:
-        f.write(requests.get(response["OriginalTrackUrl"]).content)
-
-    
-
     
 
 def query_quality_song(query, quality):
