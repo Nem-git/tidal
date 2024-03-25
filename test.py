@@ -1,8 +1,8 @@
 import requests
-import json
-from simple_term_menu import TerminalMenu
+#from simple_term_menu import TerminalMenu
 
 url = "https://host-hifi-restapi-on-vercel-git-main-sachinsenal0x64.vercel.app/"
+url = "https://tidal.401658.com/"
 
 
 query = "Starships"
@@ -28,18 +28,20 @@ summary = []
 for song in range(len(liste)):
     summary.append(f"{song + 1}. {liste[song]['title']} by {liste[song]['artist']['name']} [{liste[song]['id']}]")
 
-terminal_menu = TerminalMenu(
-    summary,
-    title=(f"Results for track '{query}' from Tidal\nSPACE - select, ENTER - download, ESC - exit"),
-    preview_command="bat --color=always code/tidal.py",
-    preview_size=0.75,
-    cycle_cursor=True,
-    clear_screen=True,
-    multi_select=True,
-    multi_select_select_on_accept=False,
-)
+#terminal_menu = TerminalMenu(
+#    summary,
+#    title=(f"Results for track '{query}' from Tidal\nSPACE - select, ENTER - download, ESC - exit"),
+#    preview_command="bat --color=always code/tidal.py",
+#    preview_size=0.75,
+#    cycle_cursor=True,
+#    clear_screen=True,
+#    multi_select=True,
+#    multi_select_select_on_accept=False,
+#)
+#
+#chosen = terminal_menu.show()
+    
 
-chosen = terminal_menu.show()
 #if chosen is None:
 #    print("Nothing chosen, exiting..")
 #else:

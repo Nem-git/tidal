@@ -1,6 +1,4 @@
 import requests
-import pandas as pd
-import json
 import os
 
 url = "https://tidal.401658.xyz"
