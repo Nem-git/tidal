@@ -13,7 +13,7 @@ class Song:
     track_url = None
 
     def __init__(self) -> None:
-        self.song_response = 
+        self.song_response = None
 
 
 
