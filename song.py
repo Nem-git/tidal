@@ -1,5 +1,5 @@
 import requests
-from mutagen.flac import FLAC
+from mutagen import flac
 import os
 
 class Song:
@@ -20,7 +20,7 @@ class Song:
     def Infos(self) -> None:
         self.response = requests.get(self.request_url, params={"id" : self.id, "quality" : self.quality})
         while self.response.status_code != 200:
-            self.response = requests.get(url, params={"id" : self.id, "quality" : self.quality})
+            self.response = requests.get(self.request_url, params={"id" : self.id, "quality" : self.quality})
         
         self.response = self.response.json()
         
@@ -35,7 +35,7 @@ class Song:
     
     def Download(self) -> None:
 
-        if not os.path.exists(self.path):
+        if not os.path.exists(f"{self.path}{self.number} {self.name}.flac"):
             os.makedirs(self.path)
         else:
             print(f"The path {self.path} already exists")
@@ -47,7 +47,7 @@ class Song:
             f.write(self.response.content)
     
     def Tag(self) -> None:
-        f = FLAC(f"{self.path}{self.number} {self.name}.flac")
+        f = flac.FLAC(f"{self.path}{self.number} {self.name}.flac")
         print(f.tags)
         f.add_tags()
         f.tags["ALBUM"] = self.album_name
@@ -56,31 +56,15 @@ class Song:
         f.tags["TITLE"] = self.name
         f.tags["TRACKNUMBER"] = self.number
         f.save()
-
-        f = FLAC(f"{self.path}{self.number} {self.name}.flac")
-        print(f.tags)
-
-
-
-        print(f.tags)
+        f.add_picture(f"{self.path}cover.jpg")
+        pic = flac.Picture()
+        with open(f"{self.path}cover.jpg", "rb") as cover:
+            pic.data = cover.read()
+        pic.mime = u"image/jpeg"
+        pic.width = 1280
+        pic.height = 1280
         
 
 
-
-
-
-#song_response = requests.get(f"{url}track/?id={song_id}&quality={song_quality}").json()
-#song_path = f"../{artist_name}/{artist_name} - {song_response[0]['album']['title']} ({release_year})/"
-
-#if not os.path.exists(song_path):
-#    os.makedirs(song_path)
-#else:
-#    "Something doesnt work with the path"
-    
-#with open(f"{song_path}{artist_name} - {song_response[0]['title']}.flac", "wb") as f:
-#    song_link = requests.get(song_response[2]['OriginalTrackUrl'])
-#    while 200 != song_link.status_code:
-#        song_link = requests.get(song_response[2]['OriginalTrackUrl'])
-#    f.write(song_link.content)
-        
-
+        f = flac.FLAC(f"{self.path}{self.number} {self.name}.flac")
+        print(f.tags)
