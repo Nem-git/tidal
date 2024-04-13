@@ -36,12 +36,6 @@ def Download_cover(cover_code, cover_path):
             cover_response = requests.get(f"{cover_url}640x640.jpg")
         c.write(cover_response.content)
 
-
-f = FLAC(f"../Annie Brocoli/Annie Brocoli/04 Ma coccinelle.flac")
-print(f.tags)
-
-
-
 #os.system("clear")
 #while True:
 #    print("Download Artist ONLY(fuck you)\n")

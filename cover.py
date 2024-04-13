@@ -1,12 +1,15 @@
 import requests
 import os
+from thing import Thing
 
-class Cover():
-    request_url = "https://tidal.401658.xyz/cover/"
-    url = None
-    id = None
-    path = None
-    response = None
+class Cover(Thing):
+    def __init__(self) -> None:
+
+        self.request_url = "https://tidal.401658.xyz/cover/"
+        self.url = None
+        self.id = None
+        self.path = None
+        self.response = None
 
     def Download(self) -> None:
 
