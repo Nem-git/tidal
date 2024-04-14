@@ -37,8 +37,9 @@ class Album(Thing):
         
         self.cover += "1280x1280.jpg"
 
-        self.artist_name = self.response[0]['artist']['name']
-        self.name = self.response[0]['title']
+        for character in "\/":
+            self.artist_name = self.response[0]['artist']['name'].replace(character, "")
+            self.name = self.response[0]['title'].replace(character, "")
 
         self.path = f"../{self.artist_name}/{self.name}/"
 

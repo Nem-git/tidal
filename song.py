@@ -27,14 +27,17 @@ class Song(Thing):
         
         self.response = self.response.json()
         
-        self.artist_name = self.response[0]["artist"]["name"]
+        for character in "\/":
+            #self.artist_name = self.response[0]["artist"]["name"].replace(character, "")
+            #self.album_name = self.response[0]["album"]["title"].replace(character, "")
+            self.name = self.response[0]["title"].replace(character, "")
+        
         self.artist_cover = self.response[0]["artist"]["picture"]
-        self.album_name = self.response[0]["album"]["title"]
         self.album_cover = self.response[0]["album"]["cover"]
-        self.name = self.response[0]["title"]
         self.number = f"{self.response[0]['trackNumber']:02}"
-        print(self.response[2]["OriginalTrackUrl"])
         self.url = self.response[2]["OriginalTrackUrl"]
+
+
         self.path = f"../{self.artist_name}/{self.album_name}/"
     
     def Download(self) -> None:
@@ -61,16 +64,19 @@ class Song(Thing):
         track.tags["TITLE"] = self.name
         track.tags["TRACKNUMBER"] = self.number
         
-        self.album_cover = flac.Picture()
+        try:
+            self.album_cover = flac.Picture()
 
-        with open(f"{self.path}cover.jpg", "rb") as _:
-            self.album_cover.data = _.read()
+            with open(f"{self.path}cover.jpg", "rb") as _:
+                self.album_cover.data = _.read()
         
-        self.album_cover.type = id3.PictureType.COVER_FRONT
-        self.album_cover.mime = u"image/jpeg"
-        self.album_cover.width = 1280
-        self.album_cover.height = 1280
-        track.add_picture(self.album_cover)
+            self.album_cover.type = id3.PictureType.COVER_FRONT
+            self.album_cover.mime = u"image/jpeg"
+            self.album_cover.width = 1280
+            self.album_cover.height = 1280
+            track.add_picture(self.album_cover)
+        except:
+            pass
 
 
         #self.artist_cover = flac.Picture()

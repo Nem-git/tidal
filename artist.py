@@ -26,8 +26,8 @@ class Artist(Thing):
 
         for i in self.liste:
             self.albums.append(i["id"])
-        
-        self.name = self.response[0]["rows"][0]["modules"][0]["pagedList"]["items"][0]["artists"][0]["name"]
+        for character in "\/":
+            self.name = self.response[0]["rows"][0]["modules"][0]["pagedList"]["items"][0]["artists"][0]["name"].replace(character, "")
         
         self.path = f"../{self.name}/"
 
