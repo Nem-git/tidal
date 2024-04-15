@@ -9,21 +9,27 @@ album = Album()
 cover = Cover()
 artist = Artist()
 
+
+
 if __name__ == "__main__":
 
-    artist.id = 36212
+    artist.id = 9127 #7589458
     artist.Infos()
     
     for al in artist.albums:
-        
-        print(al)
 
         album.id = al
-
+        album.artist_name = artist.name
         album.Infos()
+        print(album.name)
     
         song.artist_cover = album.artist_cover
 
+        if not os.path.exists(f"{song.path}cover.jpg"):
+            cover.id = album.id + 1
+            cover.path = album.path
+            cover.Download()
+        
         for id in album.songs:
             song.artist_name = artist.name
             song.album_name = album.name
@@ -32,17 +38,11 @@ if __name__ == "__main__":
             song.Infos()
             song.Download()
 
-            if not os.path.exists(f"{song.path}cover.jpg"):
-                cover.id = album.id + 1
-                cover.path = album.path
-                cover.Download()
-            else:
-                pass
-
             song.Tag()
             
-            cover = Cover()
             song = Song()
+        
+        cover = Cover()
 
         album = Album()
 

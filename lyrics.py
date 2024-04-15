@@ -1,2 +1,3 @@
-import requests
+from common import Common
+
 

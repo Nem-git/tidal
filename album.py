@@ -1,8 +1,6 @@
-import requests
-import os
-from thing import Thing
+from common import Common
 
-class Album(Thing):
+class Album:
     
 
     def __init__(self) -> None:
@@ -19,35 +17,24 @@ class Album(Thing):
 
 
     def Infos(self):
-        self.response = requests.get(self.request_url, params={"id" : self.id})
-        while self.response.status_code != 200:
-            self.response = requests.get(self.request_url, params={"id" : self.id})
 
-        self.response = self.response.json()
+        self.response = Common.Send_request(self.request_url, {"id" : self.id})
 
         if self.response[0]["artist"]["picture"] != None:
-            for _ in self.response[0]["artist"]["picture"].split("-"):
-                self.artist_cover += f"{_}/"
+            self.artist_cover += self.response[0]["artist"]["picture"].replace("-", "/")
 
         self.date = self.response[0]["releaseDate"].split("-")[0]
         self.cover = self.response[0]["cover"]
 
-        for _ in self.response[0]["releaseDate"].split("-"):
-            self.cover += f"{_}/"
+        self.cover += self.response[0]["releaseDate"].replace("-", "/")
         
         self.cover += "1280x1280.jpg"
 
-        for character in "\/":
-            self.artist_name = self.response[0]['artist']['name'].replace(character, "")
-            self.name = self.response[0]['title'].replace(character, "")
-
-        self.path = f"../{self.artist_name}/{self.name}/"
+        #self.artist_name = Common.Verify_string(self.response[0]['artist']['name'])
+        self.name = Common.Verify_string(self.response[0]['title'])
 
         for i in self.response[1]["items"]:
             self.songs.append(i["item"]["id"])
-        
-        if not os.path.exists(f"{self.path}"):
-            os.makedirs(self.path)
-        else:
-            pass
-            #print(f"The path {self.path} already exists")
+
+        self.path = f"../{self.artist_name}/{self.name}/"
+        Common.Verify_path(self.path)
