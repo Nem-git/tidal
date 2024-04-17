@@ -10,7 +10,6 @@ cover = Cover()
 artist = Artist()
 
 
-
 if __name__ == "__main__":
 
     artist.id = 9127 #7589458
@@ -47,6 +46,3 @@ if __name__ == "__main__":
         album = Album()
 
     artist = Artist()
-
-
-    
