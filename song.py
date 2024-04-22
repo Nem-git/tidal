@@ -30,9 +30,7 @@ class Song(Common):
     def Infos(self) -> None:
 
         self.response = Common.Send_request(self.download_url, {"id" : self.id, "quality" : self.quality})
-        
-        #self.artist_name = self.response[0]["artist"]["name"].replace(character, "")
-        #self.album_name = self.response[0]["album"]["title"].replace(character, "")
+
         self.name = Common.Verify_string(self.response[0]["title"])
         
         self.artist_cover = self.response[0]["artist"]["picture"]

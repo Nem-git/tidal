@@ -30,7 +30,6 @@ class Album:
         
         self.cover += "1280x1280.jpg"
 
-        #self.artist_name = Common.Verify_string(self.response[0]['artist']['name'])
         self.name = Common.Verify_string(self.response[0]['title'])
 
         for i in self.response[1]["items"]:
