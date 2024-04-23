@@ -18,6 +18,12 @@ class Common:
     
     def Verify_string(text) -> str:
         if type(text) == str:
-            for char in "\/*":
+            for char in '\/*?:<>"|':
                 text = text.replace(char, "")
             return text
+    
+    def Clear(self) -> None:
+        if os.name == "nt":
+            os.system("cls")
+        else:
+            os.system("clear")

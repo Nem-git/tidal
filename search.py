@@ -15,7 +15,7 @@ class Search:
         self.response = Common.Send_request(self.request_url, {"a" : self.query})
 
         for artist in self.response[0]["artists"]["items"]:
-            print(f'{len(self.ids) + 1}. {artist["name"]} {artist["id"]}')
+            print(f'{len(self.ids) + 1}. {artist["name"]} [{artist["id"]}]')
             self.ids.append(artist["id"])
         
         return self.ids

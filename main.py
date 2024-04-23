@@ -3,6 +3,7 @@ from cover import Cover
 from album import Album
 from artist import Artist
 from search import Search
+from common import Common
 import os
 
 song = Song()
@@ -10,45 +11,10 @@ album = Album()
 cover = Cover()
 artist = Artist()
 search = Search()
+common = Common()
 
 
 if __name__ == "__main__":
-
-#    artist.id = 9127 #7589458
-#    artist.Infos()
-#    
-#    for al in artist.albums:
-
-#        album.id = al
-#        album.artist_name = artist.name
-#        album.Infos()
-#        print(album.name)
-    
-#        song.artist_cover = album.artist_cover
-
-#        if not os.path.exists(f"{song.path}cover.jpg"):
-#            cover.id = album.id + 1
-#            cover.path = album.path
-#            cover.Download()
-        
-#        for id in album.songs:
-#            song.artist_name = artist.name
-#            song.album_name = album.name
-#            song.quality = "HI_RES_LOSSLESS"
-#            song.id = id
-#            song.Infos()
-#            song.Download()
-
-#            song.Tag()
-            
-#            song = Song()
-        
-#        cover = Cover()
-
-#        album = Album()
-
-#    artist = Artist()
-
 
     if os.name == "nt":
         os.system("cls")
@@ -63,17 +29,23 @@ if __name__ == "__main__":
             query = input("Query:\n")
         except:
             print("Please enter a valid number\n")
+
+    common.Clear
     
     if search_type == 1:
         search.query = query
         search.liste = search.Artist()
         numbers = search.Choice()
         ids = []
+
         for number in numbers:
             ids.append(search.liste[number - 1])
+        
+        common.Clear()
         for id in ids:
-            artist.id = id #9127 #7589458
+            artist.id = id
             artist.Infos()
+            print(f"\n\n\nDownloading all songs from {artist.name}")
             
             for al in artist.albums:
 
@@ -108,10 +80,10 @@ if __name__ == "__main__":
         search = Search()
         
     if search_type == 2:
-        self.Album()
+        search.Album()
         
     if search_type == 3:
-        self.Track()
+        search.Track()
         
     if search_type == 4:
-        self.Cover()
+        search.Cover()
