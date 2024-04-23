@@ -34,6 +34,10 @@ class Album:
 
         for i in self.response[1]["items"]:
             self.songs.append(i["item"]["id"])
+        
+        
+        if self.artist_name == None:
+            self.artist_name = Common.Verify_string(self.response[0]["artist"]["name"])
 
         self.path = f"../{self.artist_name}/{self.name}/"
         Common.Verify_path(self.path)

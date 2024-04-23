@@ -1,5 +1,3 @@
-import os
-import requests
 from common import Common
 
 class Search:
@@ -9,14 +7,24 @@ class Search:
         self.response = None
         self.ids = []
         self.query = None
-    
+        self.liste = None
 
-    def Artist(self) -> int:
+
+    def Artist(self) -> list:
         self.response = Common.Send_request(self.request_url, {"a" : self.query})
 
         for artist in self.response[0]["artists"]["items"]:
             print(f'{len(self.ids) + 1}. {artist["name"]} [{artist["id"]}]')
             self.ids.append(artist["id"])
+        
+        return self.ids
+    
+    def Album(self) -> list:
+        self.response = Common.Send_request(self.request_url, {"al", self.query})
+
+        for album in self.response["albums"]["items"]:
+            print(f'{len(self.ids) + 1}. {album["title"]} - {album["artists"][0]} [{"id"}]')
+            self.ids.append(album["id"])
         
         return self.ids
 
@@ -32,3 +40,4 @@ class Search:
                 self.ids = []
         
         return self.ids
+
