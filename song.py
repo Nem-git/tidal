@@ -1,15 +1,16 @@
 import requests
 from mutagen import flac, id3
 from common import Common
+from album import Album
 
 class Song(Common):
 
     def __init__(self) -> None:
         self.download_url = "https://tidal.401658.xyz/track/"
         self.search_url = "https://tidal.401658.xyz/search/"
-        self.artist_name = None
+        self.artist_name = Album().artist_name
         self.artist_cover = None
-        self.album_name = None
+        self.album_name = Album().name
         self.album_cover = None
         self.name = None
         self.number = None
@@ -32,12 +33,15 @@ class Song(Common):
         self.response = Common.Send_request(self.download_url, {"id" : self.id, "quality" : self.quality})
 
         self.name = Common.Verify_string(self.response[0]["title"])
-        
         self.artist_cover = self.response[0]["artist"]["picture"]
         self.album_cover = self.response[0]["album"]["cover"]
         self.number = f"{self.response[0]['trackNumber']:02}"
         self.url = self.response[2]["OriginalTrackUrl"]
 
+        if self.artist_name == None:
+            self.artist_name = self.response[0]["artist"]["name"]
+        if self.album_name == None:
+            self.album_name = self.response[0]["album"]["title"]
         self.path = f"../{self.artist_name}/{self.album_name}/"
     
     def Download(self) -> None:

@@ -20,28 +20,7 @@ def Artist_download(ids):
         artist.Infos()
         print(f"Downloading all songs from {artist.name}")
         Album_download(artist.albums)
-#        for al in artist.albums:
-#            album.id = al
-#            album.artist_name = artist.name
-#            album.Infos()
-#            print(album.name)
-#            song.artist_cover = album.artist_cover
-#            if not os.path.exists(f"{song.path}cover.jpg"):
-#                cover.id = album.id + 1
-#                cover.path = album.path
-#                cover.Download()
-#            for id in album.songs:
-#                song.artist_name = artist.name
-#                song.album_name = album.name
-#                song.quality = "HI_RES_LOSSLESS"
-#                song.id = id
-#                song.Infos()
-#                song.Download()
-#                song.Tag()
-#                song = Song()
-#            cover = Cover()
-#            album = Album()
-#        artist = Artist()
+        artist = Artist()
 
 def Album_download(ids):
     album = Album()
@@ -56,19 +35,30 @@ def Album_download(ids):
             cover.id = album.id + 1
             cover.path = album.path
             cover.Download()
-        for id in album.songs:
-            song.artist_name = album.artist_name
-            song.album_name = album.name
-            song.quality = "HI_RES_LOSSLESS"
-            song.id = id
-            song.Infos()
-            song.Download()
-            song.Tag()
-            song = Song()
+#        for id in album.songs:
+#            song.artist_name = album.artist_name
+#            song.album_name = album.name
+#            song.quality = "HI_RES_LOSSLESS"
+#            song.id = id
+#            song.Infos()
+#            song.Download()
+#            song.Tag()
+#            song = Song()
+        song.artist_name = album.artist_name
+        song.album_name = album.name
+        Track_download(album.songs)
         cover = Cover()
         album = Album()
 
-
+def Track_download(ids):
+    song = Song()
+    for id in ids:
+        song.quality = "HI_RES_LOSSLESS"
+        song.id = id
+        song.Infos()
+        song.Download()
+        song.Tag()
+        song = Song()
 
 
 if __name__ == "__main__":
@@ -122,6 +112,8 @@ if __name__ == "__main__":
         Album_download(ids)
         
     if search_type == 3:
+        if query_id == 1:
+            pass
         search.Track()
         
     if search_type == 4:
