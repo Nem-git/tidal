@@ -22,6 +22,7 @@ class Artist:
 
         for i in self.liste:
             self.albums.append(i["id"])
+        
         try:
             self.name = Common.Verify_string(Common.Send_request(f"https://tidal.401658.xyz/artist/", {"id" : self.id})[0]["name"])
         except:

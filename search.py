@@ -20,10 +20,10 @@ class Search:
         return self.ids
     
     def Album(self) -> list:
-        self.response = Common.Send_request(self.request_url, {"al", self.query})
+        self.response = Common.Send_request(self.request_url, {"al" : self.query})
 
         for album in self.response["albums"]["items"]:
-            print(f'{len(self.ids) + 1}. {album["title"]} - {album["artists"][0]} [{"id"}]')
+            print(f'{len(self.ids) + 1}. {album["title"]} - {album["artists"][0]["name"]} [{album["id"]}]')
             self.ids.append(album["id"])
         
         return self.ids

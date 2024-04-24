@@ -51,27 +51,31 @@ class Song(Common):
             track.write(self.response.content)
     
     def Tag(self) -> None:
-        track = flac.FLAC(f"{self.path}{self.number} {self.name}.flac")
-        
-        track.add_tags()
-        track.tags["ALBUM"] = self.album_name
-        track.tags["ARTIST"] = self.artist_name
-        track.tags["COMMENT"] = f"QUALITY: {self.quality}"
-        track.tags["TITLE"] = self.name
-        track.tags["TRACKNUMBER"] = self.number
-        
         try:
-            self.album_cover = flac.Picture()
+            track = flac.FLAC(f"{self.path}{self.number} {self.name}.flac")
 
-            with open(f"{self.path}cover.jpg", "rb") as _:
-                self.album_cover.data = _.read()
+            track.add_tags()
+            track.tags["ALBUM"] = self.album_name
+            track.tags["ARTIST"] = self.artist_name
+            track.tags["COMMENT"] = f"QUALITY: {self.quality}"
+            track.tags["TITLE"] = self.name
+            track.tags["TRACKNUMBER"] = self.number
+
+            try:
+                self.album_cover = flac.Picture()
+
+                with open(f"{self.path}cover.jpg", "rb") as _:
+                    self.album_cover.data = _.read()
+
+                self.album_cover.type = id3.PictureType.COVER_FRONT
+                self.album_cover.mime = u"image/jpeg"
+                self.album_cover.width = 1280
+                self.album_cover.height = 1280
+                track.add_picture(self.album_cover)
+            except:
+                pass
+
+            track.save()
         
-            self.album_cover.type = id3.PictureType.COVER_FRONT
-            self.album_cover.mime = u"image/jpeg"
-            self.album_cover.width = 1280
-            self.album_cover.height = 1280
-            track.add_picture(self.album_cover)
         except:
-            pass
-
-        track.save()
+            print("NOT A FLAC FILE")

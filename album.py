@@ -2,7 +2,6 @@ from common import Common
 
 class Album:
     
-
     def __init__(self) -> None:
         self.request_url = "https://tidal.401658.xyz/album/"
         self.id = None
@@ -16,7 +15,7 @@ class Album:
         self.artist_name = None
 
 
-    def Infos(self):
+    def Infos(self) -> None:
 
         self.response = Common.Send_request(self.request_url, {"id" : self.id})
 

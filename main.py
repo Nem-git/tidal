@@ -100,7 +100,6 @@ if __name__ == "__main__":
     common.Clear()
 
     if search_type == 1:
-
         if query_id == 1:
             search.liste = search.Artist()
             numbers = search.Choice()
@@ -112,12 +111,13 @@ if __name__ == "__main__":
 
         
     if search_type == 2:
-        search.query 
-        search.liste = search.Album()
-        numbers = search.Choice()
-
-        for number in numbers:
-            ids.append(search.liste[number - 1])
+        if query_id == 1:
+            search.query = query
+            search.liste = search.Album()
+            numbers = search.Choice()
+            for number in numbers:
+                ids.append(search.liste[number - 1])
+    
         search = Search()
         Album_download(ids)
         
