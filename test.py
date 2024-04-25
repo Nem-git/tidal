@@ -1,6 +1,5 @@
 import requests
 from common import Common
-import mimetypes
 
 response = Common.Send_request("https://tidal.401658.xyz/track/", {"id" : 52438080, "quality" : "HI_RES_LOSSLESS"})
 url = response[2]["OriginalTrackUrl"]

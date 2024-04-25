@@ -9,7 +9,6 @@ class Song(Common):
         self.download_url = "https://tidal.401658.xyz/track/"
         self.search_url = "https://tidal.401658.xyz/search/"
         self.artist_name = Album().artist_name
-        self.artist_cover = None
         self.album_name = Album().name
         self.album_cover = None
         self.name = None
@@ -21,11 +20,6 @@ class Song(Common):
         self.quality = None
         self.response = None
         self.query = None
-
-    
-    def Search(self) -> None:
-        pass
-
 
     
     def Infos(self) -> None:
@@ -49,7 +43,7 @@ class Song(Common):
         Common.Verify_path(self.path)
         
 
-        with open(f"{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}", "wb") as track:
+        with open(f'{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}', "wb") as track:
             self.response = requests.get(self.url)
             while self.response.status_code != 200:
                 self.response = requests.get(self.url)

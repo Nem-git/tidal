@@ -6,21 +6,14 @@ from search import Search
 from common import Common
 import os
 
-song = Song()
-album = Album()
-cover = Cover()
-artist = Artist()
-search = Search()
-common = Common()
-
 def Artist_download(ids):
-    artist = Artist()
     for id in ids:
+        artist = Artist()
         artist.id = id
         artist.Infos()
         print(f"Downloading all songs from {artist.name}")
         Album_download(artist.albums)
-        artist = Artist()
+        
 
 def Album_download(ids):
     album = Album()
@@ -40,19 +33,24 @@ def Album_download(ids):
         album = Album()
 
 def Track_download(ids):
-    song = Song()
     for id in ids:
+        song = Song()
         song.quality = "HI_RES_LOSSLESS"
         song.id = id
         song.Infos()
         print(song.name.lower())
         song.Download()
         song.Tag()
-        song = Song()
+
+def Cover_download(ids):
+    cover = Cover()
+    for id in ids:
+        pass
 
 
 if __name__ == "__main__":
-
+    common = Common()
+    search = Search()
     common.Clear()
     
     search_type = None
@@ -107,4 +105,10 @@ if __name__ == "__main__":
         Track_download(ids)
         
     if search_type == 4:
-        search.Cover()
+        if query_id == 1:
+            search.liste = search.Cover()
+            for number in search.Choice():
+                ids.append(search.liste[number - 1])
+        
+        search = Search()
+        Cover_download(ids)
