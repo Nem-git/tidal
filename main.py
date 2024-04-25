@@ -29,23 +29,12 @@ def Album_download(ids):
     for id in ids:
         album.id = id
         album.Infos()
-        print(album.name)
-        song.artist_cover = album.artist_cover
+        print(album.name.upper())
+        #song.artist_cover = album.artist_cover
         if not os.path.exists(f"{song.path}cover.jpg"):
             cover.id = album.id + 1
             cover.path = album.path
             cover.Download()
-#        for id in album.songs:
-#            song.artist_name = album.artist_name
-#            song.album_name = album.name
-#            song.quality = "HI_RES_LOSSLESS"
-#            song.id = id
-#            song.Infos()
-#            song.Download()
-#            song.Tag()
-#            song = Song()
-        song.artist_name = album.artist_name
-        song.album_name = album.name
         Track_download(album.songs)
         cover = Cover()
         album = Album()
@@ -56,6 +45,7 @@ def Track_download(ids):
         song.quality = "HI_RES_LOSSLESS"
         song.id = id
         song.Infos()
+        print(song.name.lower())
         song.Download()
         song.Tag()
         song = Song()
@@ -83,7 +73,6 @@ if __name__ == "__main__":
 
     
     if query_id == 2:
-
         for number in input("IDs ([space] between every ID (ex: 1 4 5)):\n").split(" "):
             ids.append(int(number))
     
@@ -92,8 +81,7 @@ if __name__ == "__main__":
     if search_type == 1:
         if query_id == 1:
             search.liste = search.Artist()
-            numbers = search.Choice()
-            for number in numbers:
+            for number in search.Choice():
                 ids.append(search.liste[number - 1])
 
         search = Search()
@@ -102,10 +90,8 @@ if __name__ == "__main__":
         
     if search_type == 2:
         if query_id == 1:
-            search.query = query
             search.liste = search.Album()
-            numbers = search.Choice()
-            for number in numbers:
+            for number in search.Choice():
                 ids.append(search.liste[number - 1])
     
         search = Search()
@@ -113,8 +99,12 @@ if __name__ == "__main__":
         
     if search_type == 3:
         if query_id == 1:
-            pass
-        search.Track()
+            search.liste = search.Track()
+            for number in search.Choice():
+                ids.append(search.liste[number - 1])
+        
+        search = Search()
+        Track_download(ids)
         
     if search_type == 4:
         search.Cover()

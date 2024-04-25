@@ -1,1 +1,7 @@
 __pycache__/*
+__pycache__/album.cpython-312.pyc
+__pycache__/artist.cpython-312.pyc
+__pycache__/common.cpython-312.pyc
+__pycache__/cover.cpython-312.pyc
+__pycache__/search.cpython-312.pyc
+__pycache__/song.cpython-312.pyc

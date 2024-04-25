@@ -28,6 +28,14 @@ class Search:
         
         return self.ids
 
+    def Track(self) -> list:
+        self.response = Common.Send_request(self.request_url, {"s" : self.query})
+
+        for track in self.response["items"]:
+            print(f'{len(self.ids) + 1}. {track["title"]} - {track["artist"]["name"]} [{track["id"]}]')
+            self.ids.append(track["id"])
+        
+        return self.ids
 
     def Choice(self) -> list:
         self.ids = []

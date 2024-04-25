@@ -48,7 +48,8 @@ class Song(Common):
 
         Common.Verify_path(self.path)
         
-        with open(f"{self.path}{self.number} {self.name}.flac", "wb") as track:
+
+        with open(f"{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}", "wb") as track:
             self.response = requests.get(self.url)
             while self.response.status_code != 200:
                 self.response = requests.get(self.url)
