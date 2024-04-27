@@ -20,7 +20,7 @@ class Album:
         self.response = Common.Send_request(self.request_url, {"id" : self.id})
 
         if self.response[0]["artist"]["picture"] != None:
-            self.artist_cover += self.response[0]["artist"]["picture"].replace("-", "/")
+            self.artist_cover += self.response[0]["artist"]["picture"].replace("-", "/") + "/750x750.jpg"
 
         self.date = self.response[0]["releaseDate"].split("-")[0]
         self.cover = self.response[0]["cover"]

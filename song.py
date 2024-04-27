@@ -9,6 +9,7 @@ class Song(Common):
         self.download_url = "https://tidal.401658.xyz/track/"
         self.search_url = "https://tidal.401658.xyz/search/"
         self.artist_name = Album().artist_name
+        self.artist_cover = None
         self.album_name = Album().name
         self.album_cover = None
         self.name = None
@@ -63,10 +64,21 @@ class Song(Common):
             try:
                 self.album_cover = flac.Picture()
 
-                with open(f"{self.path}cover.jpg", "rb") as _:
+                with open(f"{self.path}{self.album_name}.jpg", "rb") as _:
                     self.album_cover.data = _.read()
 
                 self.album_cover.type = id3.PictureType.COVER_FRONT
+                
+                if self.artist_cover is not None:
+                    self.artist_cover = flac.Picture()
+
+                    with open(f"../{self.artist_name}/{self.artist_name}.jpg", "rb") as _:
+                        self.artist_cover.data = _.read()
+                    
+                    self.artist_cover.type = id3.PictureType.ARTIST
+                    self.artist_cover.mime = u"image/jpeg"
+                    track.add_picture(self.artist_cover)
+
                 self.album_cover.mime = u"image/jpeg"
                 self.album_cover.width = 1280
                 self.album_cover.height = 1280

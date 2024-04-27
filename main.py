@@ -23,7 +23,7 @@ def Album_download(ids):
         album.id = id
         album.Infos()
         print(album.name.upper())
-        #song.artist_cover = album.artist_cover
+        song.artist_cover = album.artist_cover
         if not os.path.exists(f"{song.path}cover.jpg"):
             cover.id = album.id + 1
             cover.path = album.path

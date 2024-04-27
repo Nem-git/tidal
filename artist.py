@@ -1,4 +1,5 @@
 from common import Common
+import requests
 
 class Artist:
 
@@ -34,7 +35,7 @@ class Artist:
 
         print(self.response[1][0])
         try:
-            self.cover = self.response[1][0][750]
+            self.cover = self.response[1][0]["750"]
             print(self.cover)
             with open(f'{self.path}{self.name}.jpg') as c:
                 self.response = requests.get(self.cover)
