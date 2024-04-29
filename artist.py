@@ -26,22 +26,28 @@ class Artist:
         for i in self.liste:
             self.albums.append(i["id"])
         
+        self.response = Common.Send_request(f"https://tidal.401658.xyz/artist/", {"id" : self.id})
+        
         try:
-            self.name = Common.Verify_string(Common.Send_request(f"https://tidal.401658.xyz/artist/", {"id" : self.id})[0]["name"])
+            self.name = Common.Verify_string(self.response[0]["name"])
         except:
-            self.name = Common.Verify_string(Common.Send_request(f"https://tidal.401658.xyz/artist/", {"id" : self.id})[0]["title"])
+            self.name = Common.Verify_string(self.response[0]["title"])
+        
         self.path = f"../{self.name}/"
         Common.Verify_path(self.path)
 
-        print(self.response[1][0])
-        try:
-            self.cover = self.response[1][0]["750"]
-            print(self.cover)
-            with open(f'{self.path}{self.name}.jpg') as c:
-                self.response = requests.get(self.cover)
-                while self.response.status_code != 200:
-                    self.response = requests.get(self.cover)
-                c.write(self.response.content)
-        except:
-            print("No artist cover")
+        #Cover().id = self.response[1][0]["750"]
+        #Cover().path = self.path + "artist.jpg"
+        Cover().Download(self.response[0]["picture"], self.path + "artist.jpg")
+
+        #try:
+        #    
+        #    print(self.cover)
+        #    with open(f"{self.path}artist.jpg", "wb") as c:
+        #        self.response = requests.get(self.cover)
+        #        while self.response.status_code != 200:
+        #            self.response = requests.get(self.cover)
+        #        c.write(self.response.content)
+        #except:
+        #    print("No artist cover")
         

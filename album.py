@@ -7,7 +7,7 @@ class Album:
         self.id = None
         self.date = None
         self.response = None
-        self.cover = "https://resources.tidal.com/images/"
+        self.cover = None
         self.artist_cover = self.cover
         self.songs = []
         self.path = None
@@ -20,14 +20,10 @@ class Album:
         self.response = Common.Send_request(self.request_url, {"id" : self.id})
 
         if self.response[0]["artist"]["picture"] != None:
-            self.artist_cover += self.response[0]["artist"]["picture"].replace("-", "/") + "/750x750.jpg"
+            self.cover = self.response[0]["cover"]
+
 
         self.date = self.response[0]["releaseDate"].split("-")[0]
-        self.cover = self.response[0]["cover"]
-
-        self.cover += self.response[0]["releaseDate"].replace("-", "/")
-        
-        self.cover += "1280x1280.jpg"
 
         self.name = Common.Verify_string(self.response[0]['title'])
 

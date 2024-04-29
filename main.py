@@ -9,8 +9,10 @@ import os
 def Artist_download(ids):
     for id in ids:
         artist = Artist()
+        cover = Cover()
         artist.id = id
         artist.Infos()
+        cover.Download(artist.response[0]["picture"], artist.path, "artist.jpg")
         print(f"Downloading all songs from {artist.name}")
         Album_download(artist.albums)
         
@@ -22,12 +24,7 @@ def Album_download(ids):
     for id in ids:
         album.id = id
         album.Infos()
-        print(album.name.upper())
-        song.artist_cover = album.artist_cover
-        if not os.path.exists(f"{song.path}cover.jpg"):
-            cover.id = album.id + 1
-            cover.path = album.path
-            cover.Download()
+        print(f"{album.name.upper()} [{album.id}]")
         Track_download(album.songs)
         cover = Cover()
         album = Album()
@@ -35,17 +32,21 @@ def Album_download(ids):
 def Track_download(ids):
     for id in ids:
         song = Song()
+        cover = Cover()
         song.quality = "HI_RES_LOSSLESS"
         song.id = id
         song.Infos()
         print(song.name.lower())
+        cover.Download(song.album_cover, song.path, "cover.jpg")
         song.Download()
+        cover.Download(song.artist_cover, f"../{song.artist_name}/", "artist.jpg")
         song.Tag()
 
-def Cover_download(ids):
+def Cover_download(id, path, name):
     cover = Cover()
-    for id in ids:
-        pass
+    Common.Verify_path(path)
+    cover.id = id
+    cover.Download()
 
 
 if __name__ == "__main__":
