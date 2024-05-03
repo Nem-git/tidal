@@ -33,15 +33,14 @@ class Song(Common):
         self.url = self.response[2]["OriginalTrackUrl"]
 
         if self.artist_name == None:
-            self.artist_name = self.response[0]["artist"]["name"]
+            self.artist_name = Common.Verify_string(self.response[0]["artist"]["name"])
         if self.album_name == None:
-            self.album_name = self.response[0]["album"]["title"]
+            self.album_name = Common.Verify_string(self.response[0]["album"]["title"])
         self.path = f"../{self.artist_name}/{self.album_name}/"
     
     def Download(self) -> None:
 
         Common.Verify_path(self.path)
-        
 
         with open(f'{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}', "wb") as track:
             self.response = requests.get(self.url)

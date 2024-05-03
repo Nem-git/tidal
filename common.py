@@ -18,8 +18,8 @@ class Common:
     
     def Verify_string(text) -> str:
         if type(text) == str:
-            for char in '\/*?:<>"|':
-                text = text.replace(char, "")
+            for c in '\\/*?:<>"|':
+                text = text.replace(c, "")
             return text
 
     def Clear(self) -> None:

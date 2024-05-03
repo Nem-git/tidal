@@ -1,5 +1,6 @@
 from common import Common
 import requests
+from cover import Cover
 
 class Artist:
 
@@ -38,7 +39,7 @@ class Artist:
 
         #Cover().id = self.response[1][0]["750"]
         #Cover().path = self.path + "artist.jpg"
-        Cover().Download(self.response[0]["picture"], self.path + "artist.jpg")
+        Cover().Download(self.response[0]["picture"], self.path, "artist.jpg")
 
         #try:
         #    
