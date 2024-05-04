@@ -4,7 +4,6 @@ from album import Album
 from artist import Artist
 from search import Search
 from common import Common
-import os
 
 def Artist_download(ids):
     for id in ids:

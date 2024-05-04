@@ -1,5 +1,4 @@
 from common import Common
-import requests
 from cover import Cover
 
 class Artist:
