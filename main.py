@@ -4,6 +4,7 @@ from album import Album
 from artist import Artist
 from search import Search
 from common import Common
+import time
 
 def Artist_download(ids):
     for id in ids:
@@ -29,6 +30,7 @@ def Album_download(ids):
         album = Album()
 
 def Track_download(ids):
+    ssss = time.time()
     for id in ids:
         song = Song()
         cover = Cover()
@@ -40,6 +42,7 @@ def Track_download(ids):
         song.Download()
         cover.Download(song.artist_cover, f"../{song.artist_name}/", "artist.jpg")
         song.Tag()
+    print(time.time() - ssss)
 
 def Cover_download(id, path, name):
     cover = Cover()
