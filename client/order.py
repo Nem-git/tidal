@@ -35,7 +35,7 @@ class Order:
         ) = await Track.metadata(resp, None)
 
         path = "/".join((path, Path.Clean(artists), Path.Clean(album["title"])))
-        await Track.create_dir(path)
+        Track.create_dir(path)
         
         track_path = f"{path}/{track_number} {Path.Clean(title)}{file_extension}"
         await Track.download_media(track_path, url)

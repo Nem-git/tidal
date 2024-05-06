@@ -1,4 +1,6 @@
 import asyncio
+from .downloads import Download
+
 
 class Album:
 
