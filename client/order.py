@@ -13,7 +13,7 @@ class Order:
 
     async def Album(item_id, quality, path, artist_cover_path):
         
-        resp = await Album.download_json(itemm_id)
+        resp = await Album.download_json(item_id)
 
         (
             item_id,
@@ -26,23 +26,46 @@ class Order:
             explicit,
             artists,
             volume_number,
+            tracks,
             #quality #Not sure if it's even useful, I'll have to check later
-        ) = await Album.metadata
+        ) = await Album.metadata(resp)
 
-        queue = asyncio.Queue(0)
+        #queue = asyncio.Queue(0)
 
-        #for tid in 
+        track_ids = []
+        for track in tracks:
+            track_id = track["item"]["id"]
+            track_ids.append(track_id)
 
         album_cover_path = None #Temporary
-        await Order.Track(
-            item_id, #Track id, not album
+
+        #for track_id in track_ids:
+        #    await Order.Track(
+        #        track_id, #Track id, not album
+        #        quality,
+        #        path,
+        #        album_cover_path,
+        #        artist_cover_path
+        #    )
+        async_list = []
+
+        tasks = [asyncio.ensure_future(Order.Track(
+            track_id,
             quality,
             path,
             album_cover_path,
             artist_cover_path
-        )
+        ) for track_id in track_ids)]
 
+        await asyncio.gather(*tasks)
 
+        #await Order.Track(
+        #    track_id,
+        #    quality,
+        #    path,
+        #    album_cover_path,
+        #    artist_cover_path
+        #)
 
 
 
@@ -86,5 +109,5 @@ class Order:
         )
 
 ssss = time.time()
-asyncio.run(Order.Track(49820191, "HI_RES_LOSSLESS", ".", None, None))
+asyncio.run(Order.Album(103805723, "HI_RES_LOSSLESS", ".", None))
 print(time.time() - ssss)

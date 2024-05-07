@@ -1,4 +1,3 @@
-import asyncio
 import aiofiles
 from mutagen import flac, mp4, id3
 from .downloads import Download
@@ -27,7 +26,7 @@ class Track:
 
         version = track.get("version", 1)
         if version is not None:
-            title = f("{title} ({version})")
+            title = (f"{title} ({version})")
         
         qualities = {
             "LOW": 0,

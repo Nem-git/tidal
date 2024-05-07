@@ -1,5 +1,4 @@
 import aiohttp
-import asyncio
 import aiofiles
 
 class Download:
@@ -7,7 +6,7 @@ class Download:
     async def Media(path, url, param):
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=param) as resp:
-                if resp.status == 200 and resp.status != 404:
+                if resp.ok:
                     async with aiofiles.open(f"{path}", "wb") as track:
                         async for chunk in resp.content.iter_chunked(4096000):
                             await track.write(chunk)

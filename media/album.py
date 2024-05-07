@@ -31,8 +31,13 @@ class Album:
         }
 
         quality = qualities[resp.get("audioQuality")]
+        
+        print(resp.get("items"))
+        tracks = resp.get("items")
 
-        return item_id, title, track_number, date, year, copyrights, cover, explicit, artists, volume_number#, quality
+        cover = None #Temporary
+
+        return item_id, title, track_number, date, year, copyrights, cover, explicit, artists, volume_number, tracks#, quality
 
 
 
