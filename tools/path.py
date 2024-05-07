@@ -1,5 +1,4 @@
-import asyncio
-
+import os
 
 class Path:
 
@@ -9,3 +8,6 @@ class Path:
         for c in "'\\/:":
             string = string.replace(c, "-")
         return string
+    
+    def Create(path):
+        os.makedirs(path, exist_ok=True)

@@ -32,7 +32,7 @@ class Album:
 
         quality = qualities[resp.get("audioQuality")]
 
-        return item_id, title, track_number, date, year, copyrights, cover, explicit, artists, volume_number, quality
+        return item_id, title, track_number, date, year, copyrights, cover, explicit, artists, volume_number#, quality
 
 
 

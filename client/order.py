@@ -11,14 +11,45 @@ class Order:
     async def Artist():
         pass
 
-    async def Album(album_cover_path, artist_cover_path):
-        pass
+    async def Album(item_id, quality, path, artist_cover_path):
+        
+        resp = await Album.download_json(itemm_id)
+
+        (
+            item_id,
+            title,
+            track_number,
+            date,
+            year,
+            copyrights,
+            cover,
+            explicit,
+            artists,
+            volume_number,
+            #quality #Not sure if it's even useful, I'll have to check later
+        ) = await Album.metadata
+
+        queue = asyncio.Queue(0)
+
+        #for tid in 
+
+        album_cover_path = None #Temporary
+        await Order.Track(
+            item_id, #Track id, not album
+            quality,
+            path,
+            album_cover_path,
+            artist_cover_path
+        )
+
+
+
 
 
     async def Track(item_id, quality, path, album_cover_path, artist_cover_path):
-        ssss = time.time()
 
         resp = await Track.download_json(item_id, quality)
+
         (
             item_id,
             title,
@@ -35,7 +66,7 @@ class Order:
         ) = await Track.metadata(resp, None)
 
         path = "/".join((path, Path.Clean(artists), Path.Clean(album["title"])))
-        Track.create_dir(path)
+        Path.Create(path)
         
         track_path = f"{path}/{track_number} {Path.Clean(title)}{file_extension}"
         await Track.download_media(track_path, url)
@@ -54,7 +85,6 @@ class Order:
             artist_cover_path
         )
 
-        print(time.time() - ssss)
-
-
+ssss = time.time()
 asyncio.run(Order.Track(49820191, "HI_RES_LOSSLESS", ".", None, None))
+print(time.time() - ssss)
