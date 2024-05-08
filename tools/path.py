@@ -2,12 +2,12 @@ import os
 
 class Path:
 
-    def Clean(string):
+    def Clean(self, string : str) -> str:
         for c in '*?<>"|':
             string = string.replace(c, "")
         for c in "'\\/:":
-            string = string.replace(c, "-")
+            string = string.replace(c, " ")
         return string
     
-    def Create(path):
-        os.makedirs(path, exist_ok=True)
+    def Create(self, path : str) -> None:
+        os.makedirs(name=path, exist_ok=True)

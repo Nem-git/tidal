@@ -1,17 +1,16 @@
-import asyncio
 from .downloads import Download
 
 
 class Album:
 
-    async def download_json(item_id):
-        return await Download.Json("album", {"id" : item_id})
+    async def download_json(self, item_id : str) -> dict[str, str]:
+        return await Download().Json(rq_type="album", param={"id" : item_id})
     
 
-    async def metadata(resp):
+    async def metadata(self, resp : dict[str, str]) -> tuple[str]:
         streamable = resp.get("allowStreaming", False)
         if not streamable:
-            return None
+            return
         
         item_id = resp.get("id")
         title = resp.get("title", "Unknown Album")
@@ -32,7 +31,6 @@ class Album:
 
         quality = qualities[resp.get("audioQuality")]
         
-        print(resp.get("items"))
         tracks = resp.get("items")
 
         cover = None #Temporary

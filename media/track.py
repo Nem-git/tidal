@@ -1,20 +1,21 @@
 import aiofiles
-from mutagen import flac, mp4, id3
+from mutagen import flac, mp4
+from mutagen.id3 import PictureType
 from .downloads import Download
 
-class Track:
+class Track():
 
-    async def download_media(path, url):
-        await Download.Media(path, url, {})
+    async def download_media(self, path : str, url : str):
+        await Download().Media(path=path, url=url, param={})
 
-    async def download_json(item_id, quality):
-        return await Download.Json("track", {"id" : item_id, "quality" : quality})
+    async def download_json(self, item_id : str, quality : str) -> dict[str, str]:
+        return await Download().Json(rq_type="track", param={"id" : item_id, "quality" : quality})
 
 
-    async def metadata(track, album):
+    async def metadata(self, track : dict[str, str], album : dict[str, str]) -> tuple[str]:
         streamable = track.get("allowStreaming", False)
         if not streamable:
-            return None
+            return
 
         item_id = track.get("id")
         title = track.get("title")
@@ -25,7 +26,7 @@ class Track:
         artists = " & ".join(artist["name"] for artist in track.get("artists"))
 
         version = track.get("version", 1)
-        if version is not None:
+        if track.get("version") is not None:
             title = (f"{title} ({version})")
         
         qualities = {
@@ -43,7 +44,7 @@ class Track:
         
         url = track.get("OriginalTrackUrl")
 
-        if album is None:
+        if album == {}:
             album = track.get("album")
 
         return (
@@ -62,22 +63,22 @@ class Track:
             )
     
 
-    async def tag(title, track_number, volume_number, copyrights, isrc, artists, file_extension, album, track_path, album_cover_path, artist_cover_path):
-        
+    async def tag(self, title : str, track_number : str, total_track_number : str, volume_number : str, copyrights : str, isrc : str, artists : str, file_extension : str, album : dict[str, str], track_path : str, album_cover_path : str, artist_cover_path : str):
+
         if file_extension == ".m4a":
             track = mp4.MP4(track_path)
-            track.add_tags()
+            #track.add_tags()
             track.tags["\\xa9nam"] = title
             track.tags["\\xa9ART"] = artists
             track.tags["\\xa9alb"] = album.get("title")
             track.tags["cprt"] = copyrights
             #track.tags["----:com.apple.iTunes:ISRC"] = isrc.encode("utf-8")
-            track.tags["trkn"] = str(track_number)
-            track.tags["disk"] = str(volume_number)
+            # #track.tags["trkn"] = str(object=track_number, ) #Need to add total_track_number
+            #track.tags["disk"] = str(object=volume_number)
 
-            if album_cover_path is not None:
-                async with aiofiles.open(album_cover_path, "rb") as c:
-                    track["covr"] = mp4.MP4Cover(c.read(), imageformat=FORMAT_JPEG)
+            if album_cover_path != "":
+                async with aiofiles.open(file=album_cover_path, mode="rb") as c:
+                    track["covr"] = mp4.MP4Cover(data=c.read(), imageformat="FORMAT_JPEG")
 
 
         if file_extension == ".flac":
@@ -88,28 +89,28 @@ class Track:
             track.tags["ALBUM"] = album.get("title")
             track.tags["COPYRIGHT"] = copyrights
             #track.tags["ISRC"] = isrc.encode("utf-8")
-            track.tags["TRACKNUMBER"] = str(track_number)
-            track.tags["DISCNUMBER"] = str(volume_number)
+            track.tags["TRACKNUMBER"] = str(object=track_number)
+            track.tags["DISCNUMBER"] = str(object=volume_number)
 
-            if album_cover_path is not None:
-                async with aiofiles.open(album_cover_path, "rb") as c:
+            if album_cover_path != "":
+                async with aiofiles.open(file=album_cover_path, mode="rb") as c:
                     cover = flac.Picture()
                     cover.data = c.read()
-                    cover.type = id3.PictureType.COVER_FRONT
+                    cover.type = PictureType.COVER_FRONT
                     cover.mime = "image/jpeg"
                     cover.width = 1280
                     cover.height = 1280
-                    track.add_picture(cover)
+                    track.add_picture(picture=cover)
             
-            if artist_cover_path is not None:
-                async with aiofiles.open(artist_cover_path, "rb") as c:
+            if artist_cover_path != "":
+                async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
                     cover = flac.Picture()
                     cover.data = c.read()
-                    cover.type = id3.PictureType.ARTIST
+                    cover.type = PictureType.ARTIST
                     cover.mime = "image/jpeg"
                     cover.width = 1280
                     cover.height = 1280
-                    track.add_picture(cover)
+                    track.add_picture(picture=cover)
         
         track.save()
             
