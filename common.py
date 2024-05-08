@@ -15,7 +15,7 @@ class Common:
     def Verify_path(path) -> None:
         if not os.path.exists(path):
             os.makedirs(path)
-    
+
     def Verify_string(text) -> str:
         if type(text) == str:
             for c in '*?<>"|':

@@ -2,6 +2,7 @@ import requests
 from mutagen import flac, id3
 from common import Common
 
+
 class Song(Common):
 
     def __init__(self) -> None:
@@ -21,10 +22,11 @@ class Song(Common):
         self.response = None
         self.query = None
 
-    
     def Infos(self) -> None:
 
-        self.response = Common.Send_request(self.download_url, {"id" : self.id, "quality" : self.quality})
+        self.response = Common.Send_request(
+            self.download_url, {"id": self.id, "quality": self.quality}
+        )
 
         self.name = Common.Verify_string(self.response[0]["title"])
         self.artist_cover = self.response[0]["artist"]["picture"]
@@ -37,19 +39,22 @@ class Song(Common):
         if self.album_name == None:
             self.album_name = Common.Verify_string(self.response[0]["album"]["title"])
         self.path = f"../{self.artist_name}/{self.album_name}/"
-    
+
     def Download(self) -> None:
 
         Common.Verify_path(self.path)
 
-        with open(f'{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}', "wb") as track:
+        with open(
+            f'{self.path}{self.number} {self.name}.{self.url.split(".")[4].split("?")[0]}',
+            "wb",
+        ) as track:
             self.response = requests.get(self.url)
             while self.response.status_code != 200:
                 self.response = requests.get(self.url)
             track.write(self.response.content)
-    
+
     def Tag(self) -> None:
-        #try:
+        # try:
         Common.Verify_path(self.path)
         track = flac.FLAC(f"{self.path}{self.number} {self.name}.flac")
         track.add_tags()
@@ -58,29 +63,29 @@ class Song(Common):
         track.tags["COMMENT"] = f"QUALITY: {self.quality}"
         track.tags["TITLE"] = self.name
         track.tags["TRACKNUMBER"] = self.number
-        
-        #try:
+
+        # try:
         self.album_cover = flac.Picture()
         with open(f"{self.path}cover.jpg", "rb") as _:
             self.album_cover.data = _.read()
-        
+
         self.album_cover.type = id3.PictureType.COVER_FRONT
-        
+
         if self.artist_cover is not None:
             self.artist_cover = flac.Picture()
             with open(f"../{self.artist_name}/artist.jpg", "rb") as _:
                 self.artist_cover.data = _.read()
-            
+
             self.artist_cover.type = id3.PictureType.ARTIST
-            self.artist_cover.mime = u"image/jpeg"
+            self.artist_cover.mime = "image/jpeg"
             track.add_picture(self.artist_cover)
-        self.album_cover.mime = u"image/jpeg"
+        self.album_cover.mime = "image/jpeg"
         self.album_cover.width = 1280
         self.album_cover.height = 1280
         track.add_picture(self.album_cover)
-        #except:
+        # except:
         #    pass
         track.save()
 
-        #except:
+        # except:
         #    print("NOT A FLAC FILE")

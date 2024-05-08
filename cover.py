@@ -2,7 +2,8 @@ import requests
 from common import Common
 import os
 
-class Cover():
+
+class Cover:
     request_url = "https://tidal.401658.xyz/cover/"
     url = None
     response = None
@@ -12,7 +13,11 @@ class Cover():
         try:
             if not os.path.exists(path + name):
                 Common.Verify_path(path)
-                self.url = "https://resources.tidal.com/images/" + id.replace("-", "/") + "/750x750.jpg"
+                self.url = (
+                    "https://resources.tidal.com/images/"
+                    + id.replace("-", "/")
+                    + "/750x750.jpg"
+                )
                 print(self.url)
                 with open(f"{path + name}", "wb") as f:
                     self.response = requests.get(self.url)
@@ -23,4 +28,3 @@ class Cover():
                     f.write(self.response.content)
         except:
             print(f"No image to put in {path + name}")
-        

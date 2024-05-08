@@ -3,15 +3,14 @@ from .downloads import Download
 
 class Album:
 
-    async def download_json(self, item_id : str) -> dict[str, str]:
-        return await Download().Json(rq_type="album", param={"id" : item_id})
-    
+    async def download_json(self, item_id: str) -> dict[str, str]:
+        return await Download().Json(rq_type="album", param={"id": item_id})
 
-    async def metadata(self, resp : dict[str, str]) -> tuple[str]:
+    async def metadata(self, resp: dict[str, str]) -> tuple[str]:
         streamable = resp.get("allowStreaming", False)
         if not streamable:
             return
-        
+
         item_id = resp.get("id")
         title = resp.get("title", "Unknown Album")
         track_number = resp.get("numberOfTracks")
@@ -30,14 +29,21 @@ class Album:
         }
 
         quality = qualities[resp.get("audioQuality")]
-        
+
         tracks = resp.get("items")
 
-        cover = None #Temporary
+        cover = None  # Temporary
 
-        return item_id, title, track_number, date, year, copyrights, cover, explicit, artists, volume_number, tracks#, quality
-
-
-
-
-    
+        return (
+            item_id,
+            title,
+            track_number,
+            date,
+            year,
+            copyrights,
+            cover,
+            explicit,
+            artists,
+            volume_number,
+            tracks,
+        )  # , quality

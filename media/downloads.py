@@ -1,13 +1,15 @@
 import aiohttp
 import aiofiles
 
-class Download:
 
-    async def Media(self, path : str, url : str, param : dict[str, str]) -> None:
+class Download:
+    session = aiohttp.ClientSession()
+
+    async def Media(self, path: str, url: str, param: dict[str, str]) -> None:
         """
         This Python async function downloads media content from a specified URL and saves it to a file at a
         given path.
-        
+
         :param path: The `path` parameter in the `Media` function is a string that represents the file path
         where the downloaded media will be saved
         :type path: str
@@ -20,20 +22,19 @@ class Download:
         the `param` dictionary is
         :type param: dict[str, str]
         """
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url=url, params=param) as resp:
-                if resp.ok:
-                    async with aiofiles.open(file=f"{path}", mode="wb") as track:
-                        async for chunk in resp.content.iter_chunked(n=4096000):
-                            await track.write(chunk)
-                else:
-                    print(f"Server gave back error {resp.status}")
+        async with self.session.get(url=url, params=param) as resp:
+            if resp.ok:
+                async with aiofiles.open(file=f"{path}", mode="wb") as track:
+                    async for chunk in resp.content.iter_chunked(n=4096000):
+                        await track.write(chunk)
+            else:
+                print(f"Server gave back error {resp.status}")
 
-    async def Json(self, rq_type : str, param : dict[str, str]) -> dict[str, str]:
+    async def Json(self, rq_type: str, param: dict[str, str]) -> dict[str, str]:
         """
         This Python async function sends a request to a Tidal API endpoint and processes the response based
         on the provided parameters.
-        
+
         :param rq_type: The `rq_type` parameter in the provided code represents the type of request being
         made to the Tidal API. It is a string that specifies the category of data being requested, such as
         "artists", "albums", "videos", "items", or "playlists"
@@ -47,13 +48,13 @@ class Download:
         content of the dictionary returned depends on the logic within the method and the input parameters
         provided.
         """
-        
+
         types = {
-        "a" : "artists",
-        "al" : "albums",
-        "v" : "videos",
-        "s" : "items",
-        "p" : "playlists"
+            "a": "artists",
+            "al": "albums",
+            "v": "videos",
+            "s": "items",
+            "p": "playlists",
         }
 
         url = "/".join(("https://tidal.401658.xyz", rq_type))
@@ -67,7 +68,7 @@ class Download:
                             if k == "a":
                                 s_type = await resp.json()
                                 s_type = s_type[0]
-                            
+
                             s_type = s_type[types.get(k)]
                             return s_type
 

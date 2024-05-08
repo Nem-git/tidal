@@ -6,6 +6,7 @@ from search import Search
 from common import Common
 import time
 
+
 def Artist_download(ids):
     for id in ids:
         artist = Artist()
@@ -15,7 +16,7 @@ def Artist_download(ids):
         cover.Download(artist.response[0]["picture"], artist.path, "artist.jpg")
         print(f"Downloading all songs from {artist.name}")
         Album_download(artist.albums)
-        
+
 
 def Album_download(ids):
     album = Album()
@@ -28,6 +29,7 @@ def Album_download(ids):
         Track_download(album.songs)
         cover = Cover()
         album = Album()
+
 
 def Track_download(ids):
     ssss = time.time()
@@ -44,6 +46,7 @@ def Track_download(ids):
         song.Tag()
     print(time.time() - ssss)
 
+
 def Cover_download(id, path, name):
     cover = Cover()
     Common.Verify_path(path)
@@ -55,12 +58,16 @@ if __name__ == "__main__":
     common = Common()
     search = Search()
     common.Clear()
-    
+
     search_type = None
     query = None
     while type(search_type) != int:
-        try:    
-            search_type = int(input("What kind of search?\n\n1. Search artist\n2. Search album\n3. Search track\n4. Search cover\n"))
+        try:
+            search_type = int(
+                input(
+                    "What kind of search?\n\n1. Search artist\n2. Search album\n3. Search track\n4. Search cover\n"
+                )
+            )
         except:
             print("Please enter a valid number\n")
 
@@ -72,11 +79,10 @@ if __name__ == "__main__":
         query = input("Query:\n")
         search.query = query
 
-    
     if query_id == 2:
         for number in input("IDs ([space] between every ID (ex: 1 4 5)):\n").split(" "):
             ids.append(int(number))
-    
+
     common.Clear()
 
     if search_type == 1:
@@ -88,30 +94,29 @@ if __name__ == "__main__":
         search = Search()
         Artist_download(ids)
 
-        
     if search_type == 2:
         if query_id == 1:
             search.liste = search.Album()
             for number in search.Choice():
                 ids.append(search.liste[number - 1])
-    
+
         search = Search()
         Album_download(ids)
-        
+
     if search_type == 3:
         if query_id == 1:
             search.liste = search.Track()
             for number in search.Choice():
                 ids.append(search.liste[number - 1])
-        
+
         search = Search()
         Track_download(ids)
-        
+
     if search_type == 4:
         if query_id == 1:
             search.liste = search.Cover()
             for number in search.Choice():
                 ids.append(search.liste[number - 1])
-        
+
         search = Search()
         Cover_download(ids)
