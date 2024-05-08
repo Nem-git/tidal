@@ -3,7 +3,6 @@ import aiofiles
 
 
 class Download:
-    session = aiohttp.ClientSession()
 
     async def Media(self, path: str, url: str, param: dict[str, str]) -> None:
         """
@@ -22,13 +21,14 @@ class Download:
         the `param` dictionary is
         :type param: dict[str, str]
         """
-        async with self.session.get(url=url, params=param) as resp:
-            if resp.ok:
-                async with aiofiles.open(file=f"{path}", mode="wb") as track:
-                    async for chunk in resp.content.iter_chunked(n=4096000):
-                        await track.write(chunk)
-            else:
-                print(f"Server gave back error {resp.status}")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=url, params=param) as resp:
+                if resp.ok:
+                    async with aiofiles.open(file=f"{path}", mode="wb") as track:
+                        async for chunk in resp.content.iter_chunked(n=4096000):
+                            await track.write(chunk)
+                else:
+                    print(f"Server gave back error {resp.status}")
 
     async def Json(self, rq_type: str, param: dict[str, str]) -> dict[str, str]:
         """

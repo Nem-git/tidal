@@ -6,8 +6,11 @@ from ..media.track import Track
 
 
 class Order:
-    async def Artist(self):
-        pass
+    async def Artist(
+        self, item_id : str, quality : str, path:str
+    ):
+        resp: dict[str, str] = await Artists().download_json(item_id=item_id)
+         
 
     async def Album(
         self, item_id: str, quality: str, path: str, artist_cover_path: str
@@ -39,13 +42,11 @@ class Order:
             track_id = track["item"]["id"]
             track_ids.append(track_id)
 
-        tasks: list[str] = []
-
         async with asyncio.TaskGroup() as tg:
             for track_id in track_ids:
                 print(track_id)
                 tg.create_task(
-                    await Order().Track(
+                    coro=Order().Track(
                         item_id=track_id,
                         quality=quality,
                         path=path,
@@ -54,6 +55,7 @@ class Order:
                         artist_cover_path=artist_cover_path,
                     )
                 )
+
 
     async def Track(
         self,
@@ -88,11 +90,13 @@ class Order:
         path = "/".join(
             (path, Path().Clean(string=artists), Path().Clean(string=album["title"]))
         )
+
         Path().Create(path=path)
 
         track_path = (
             f"{path}/{track_number} {Path().Clean(string=title)}{file_extension}"
         )
+        
         await track.download_media(path=track_path, url=url)
 
         await track.tag(
@@ -114,7 +118,7 @@ class Order:
 ssss = time.time()
 asyncio.run(
     main=Order().Album(
-        item_id="201810799", quality="HI_RES_LOSSLESS", path=".", artist_cover_path=""
+        item_id="207124453", quality="HI_RES_LOSSLESS", path=".", artist_cover_path=""
     )
 )
 print(time.time() - ssss)
