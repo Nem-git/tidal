@@ -6,7 +6,7 @@ from .downloads import Download
 
 class Track:
 
-    async def download_media(self, path: str, url: str):
+    async def download_media(self, path: str, url: str) -> None:
         await Download().Media(path=path, url=url, param={})
 
     async def download_json(self, item_id: str, quality: str) -> dict[str, str]:
@@ -17,36 +17,36 @@ class Track:
     async def metadata(
         self, track: dict[str, str], album: dict[str, str]
     ) -> tuple[str]:
-        streamable = track.get("allowStreaming", False)
+        streamable: str | bool = track.get("allowStreaming", False)
         if not streamable:
             return
 
-        item_id = track.get("id")
-        title = track.get("title")
-        track_number = f'{track.get("trackNumber", 1):02}'
-        volume_number = track.get("volumeNumber", 1)
-        copyrights = track.get("copyright", "Not copyrighted")
-        isrc = track.get("isrc", "")
-        artists = " & ".join(artist["name"] for artist in track.get("artists"))
+        item_id: str | None = track.get("id")
+        title: str | None = track.get("title")
+        track_number: str = f'{track.get("trackNumber", "1"):02}'
+        volume_number: str = track.get("volumeNumber", "1")
+        copyrights: str = track.get("copyright", "Not copyrighted")
+        isrc: str = track.get("isrc", "")
+        artists: str = " & ".join(artist["name"] for artist in track.get("artists"))
 
-        version = track.get("version", 1)
+        version: str = track.get("version", "1")
         if track.get("version") is not None:
             title = f"{title} ({version})"
 
-        qualities = {
+        qualities: dict[str, int] = {
             "LOW": 0,
             "HIGH": 1,
             "LOSSLESS": 2,
             "HI_RES": 3,
         }
 
-        quality = qualities[track.get("audioQuality")]
+        quality: int = qualities[track.get("audioQuality")]
         if quality >= 2:
             file_extension = ".flac"
         else:
             file_extension = ".m4a"
 
-        url = track.get("OriginalTrackUrl")
+        url: str = track.get("OriginalTrackUrl")
 
         if album == {}:
             album = track.get("album")
@@ -80,7 +80,7 @@ class Track:
         track_path: str,
         album_cover_path: str,
         artist_cover_path: str,
-    ):
+    ) -> None:
 
         if file_extension == ".m4a":
             track = mp4.MP4(track_path)

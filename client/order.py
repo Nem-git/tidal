@@ -8,15 +8,15 @@ from ..media.track import Track
 class Order:
     async def Artist(
         self, item_id : str, quality : str, path:str
-    ):
+    ) -> None:
         resp: dict[str, str] = await Artists().download_json(item_id=item_id)
          
 
     async def Album(
         self, item_id: str, quality: str, path: str, artist_cover_path: str
-    ):
+    ) -> None:
 
-        resp = await Album().download_json(item_id=item_id)
+        resp: dict[str, str] = await Album().download_json(item_id=item_id)
 
         (
             item_id,
@@ -35,11 +35,11 @@ class Order:
 
         # queue = asyncio.Queue(0)
 
-        album_cover_path = ""
+        album_cover_path: str = ""
 
         track_ids: list[str] = []
         for track in tracks:
-            track_id = track["item"]["id"]
+            track_id: str = track["item"]["id"]
             track_ids.append(track_id)
 
         async with asyncio.TaskGroup() as tg:
@@ -65,7 +65,7 @@ class Order:
         total_track_number: str,
         album_cover_path: str,
         artist_cover_path: str,
-    ):
+    ) -> None:
         track = Track()
 
         resp: dict[str, str] = await track.download_json(
@@ -93,7 +93,7 @@ class Order:
 
         Path().Create(path=path)
 
-        track_path = (
+        track_path: str = (
             f"{path}/{track_number} {Path().Clean(string=title)}{file_extension}"
         )
         
@@ -115,7 +115,7 @@ class Order:
         )
 
 
-ssss = time.time()
+ssss: float = time.time()
 asyncio.run(
     main=Order().Album(
         item_id="207124453", quality="HI_RES_LOSSLESS", path=".", artist_cover_path=""

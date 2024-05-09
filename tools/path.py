@@ -4,9 +4,9 @@ import os
 class Path:
 
     def Clean(self, string: str) -> str:
-        for c in '*?<>"|':
+        for c in '*?<>"':
             string = string.replace(c, "")
-        for c in "'\\/:":
+        for c in "\\/:|":
             string = string.replace(c, " ")
         return string
 

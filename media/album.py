@@ -7,30 +7,30 @@ class Album:
         return await Download().Json(rq_type="album", param={"id": item_id})
 
     async def metadata(self, resp: dict[str, str]) -> tuple[str]:
-        streamable = resp.get("allowStreaming", False)
+        streamable: str | bool = resp.get("allowStreaming", False)
         if not streamable:
             return
 
-        item_id = resp.get("id")
-        title = resp.get("title", "Unknown Album")
-        track_number = resp.get("numberOfTracks")
-        date = resp.get("releaseDate")
-        year = date[:4]
-        copyrights = resp.get("copyright", "Not copyrighted")
-        explicit = resp.get("explicit", False)
-        artists = " & ".join(artist["name"] for artist in resp.get("artists", []))
-        volume_number = resp.get("numberOfVolumes")
+        item_id: str | None = resp.get("id")
+        title: str = resp.get("title", "Unknown Album")
+        track_number: str | None = resp.get("numberOfTracks")
+        date: str | None = resp.get("releaseDate")
+        year: str = date[:4]
+        copyrights: str = resp.get("copyright", "Not copyrighted")
+        explicit: str | bool = resp.get("explicit", False)
+        artists: str = " & ".join(artist["name"] for artist in resp.get("artists", []))
+        volume_number: str | None = resp.get("numberOfVolumes")
 
-        qualities = {
+        qualities: dict[str, int] = {
             "LOW": 0,
             "HIGH": 1,
             "LOSSLESS": 2,
             "HI_RES": 3,
         }
 
-        quality = qualities[resp.get("audioQuality")]
+        quality: int = qualities[resp.get("audioQuality")]
 
-        tracks = resp.get("items")
+        tracks: str | None = resp.get("items")
 
         cover = None  # Temporary
 
