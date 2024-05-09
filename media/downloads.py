@@ -62,26 +62,31 @@ class Download:
             async with session.get(url=url, params=param) as resp:
                 if resp.status == 200:
                     
+                    for k in param.keys():
+                        if k in types.keys():
+                            s_type: dict[str, str] = await resp.json()
+
+                            if k == "a":
+                                s_type = await resp.json()
+                                s_type = s_type[0]
+
+                            s_type = s_type[types.get(k)]
+                            return s_type
+
+                    iter_dict: dict[str, str] = {}
+                    
+                    if rq_type == "artist":
+                        iter_dict = await resp.json()
+                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"]["items"]
                     
                     
+                    else:
+                        for part in await resp.json():
+                            if type(part) is list:
+                                for j in part:
+                                    iter_dict = iter_dict | j
+
+                            else:
+                                iter_dict = iter_dict | part
                     
-                    #for k in param.keys():
-                    #    if k in types.keys():
-                    #        s_type: dict[str, str] = await resp.json()
-
-                    #        if k == "a":
-                    #            s_type = await resp.json()
-                    #            s_type = s_type[0]
-
-                    #        s_type = s_type[types.get(k)]
-                    #        return s_type
-
-                    #iter_dict: dict[str, str] = {}
-                    #for part in await resp.json():
-                    #    if type(part) is list:
-                    #        for j in part:
-                    #            iter_dict = iter_dict | j
-
-                    #    else:
-                    #        iter_dict = iter_dict | part
-                    #return iter_dict
+                    return iter_dict

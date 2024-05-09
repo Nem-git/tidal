@@ -1,9 +1,9 @@
 import asyncio
 import time
-from tools.path import Path
-from media.artist import Artist
-from media.album import Album
-from media.track import Track
+from ..tools.path import Path
+from ..media.artist import Artist
+from ..media.album import Album
+from ..media.track import Track
 
 
 class Order:
@@ -21,7 +21,6 @@ class Order:
         
         artist_cover_path: str = ""
         
-        #Got a glitch while downloading Marie-Mai 4118408
         async with asyncio.TaskGroup() as tg:
             for album_id in album_ids:
                 print(name)
@@ -33,9 +32,9 @@ class Order:
                         artist_cover_path=artist_cover_path
                     )
                 )
-
-
-
+        
+        
+         
 
     async def Album(
         self, item_id: str, quality: str, path: str, artist_cover_path: str

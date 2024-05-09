@@ -1,6 +1,5 @@
 from .downloads import Download
 
-
 class Album:
 
     async def download_json(self, item_id: str) -> dict[str, str]:
@@ -11,7 +10,6 @@ class Album:
         if not streamable:
             return
 
-        item_id: str | None = resp.get("id")
         title: str = resp.get("title", "Unknown Album")
         track_number: str | None = resp.get("numberOfTracks")
         date: str | None = resp.get("releaseDate")
@@ -32,16 +30,15 @@ class Album:
 
         tracks: str | None = resp.get("items")
 
-        cover = None  # Temporary
+        cover_id = None  # Temporary
 
         return (
-            item_id,
             title,
             track_number,
             date,
             year,
             copyrights,
-            cover,
+            cover_id,
             explicit,
             artists,
             volume_number,

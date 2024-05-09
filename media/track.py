@@ -21,7 +21,6 @@ class Track:
         if not streamable:
             return
 
-        item_id: str | None = track.get("id")
         title: str | None = track.get("title")
         track_number: str = f'{track.get("trackNumber", "1"):02}'
         volume_number: str = track.get("volumeNumber", "1")
@@ -52,7 +51,6 @@ class Track:
             album = track.get("album")
 
         return (
-            item_id,
             title,
             track_number,
             volume_number,
