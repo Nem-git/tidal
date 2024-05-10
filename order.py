@@ -29,20 +29,20 @@ class Order:
         
         artist_cover_path: str = ""
         
-        sem = asyncio.Semaphore(value=1)
-        
         print(name)
         async with asyncio.TaskGroup() as tg:
             for album_id in album_ids:
-                async with sem:
-                    tg.create_task(
-                        coro=Order().Album(
-                            item_id=album_id,
-                            quality=quality,
-                            path=path,
-                            artist_cover_path=artist_cover_path
-                        )
+                await asyncio.sleep(delay=0.1)
+                tg.create_task(
+                    coro=Order().Album(
+                        item_id=album_id,
+                        quality=quality,
+                        path=path,
+                        artist_cover_path=artist_cover_path
                     )
+                )
+        
+        
          
 
     async def Album(
@@ -76,25 +76,23 @@ class Order:
         for track in tracks:
             track_id: str = track["item"]["id"]
             track_ids.append(track_id)
-            
-        sem = asyncio.Semaphore(value=3)
 
         async with asyncio.TaskGroup() as tg:
             for track_id in tqdm.tqdm(iterable=track_ids,
                             desc=f"{title} ({year})",
                             unit=" track",
                             ascii=False):
-                async with sem:
-                    tg.create_task(
-                        coro=Order().Track(
-                            item_id=track_id,
-                            quality=quality,
-                            path=path,
-                            total_track_number=track_number,
-                            album_cover_path=album_cover_path,
-                            artist_cover_path=artist_cover_path,
-                        )
+                await asyncio.sleep(delay=0.1)
+                tg.create_task(
+                    coro=Order().Track(
+                        item_id=track_id,
+                        quality=quality,
+                        path=path,
+                        total_track_number=track_number,
+                        album_cover_path=album_cover_path,
+                        artist_cover_path=artist_cover_path,
                     )
+                )
 
 
     async def Track(
@@ -174,7 +172,7 @@ ssss: float = time.time()
 # Michael Jackson 606
 asyncio.run(
     main=Order().Artist(
-        item_id="606", quality="HI_RES_LOSSLESS", path="../"
+        item_id="9127", quality="HI_RES_LOSSLESS", path="../"
     )
 )
 print(time.time() - ssss)
