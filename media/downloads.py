@@ -30,7 +30,9 @@ class Download:
                 else:
                     print(f"Server gave back error {resp.status}")
 
-    async def Json(self, rq_type: str, param: dict[str, str]) -> dict[str, str] | dict[str, int]:
+    async def Json(
+        self, rq_type: str, param: dict[str, str]
+    ) -> dict[str, str] | dict[str, int]:
         """
         This Python async function sends a request to a Tidal API endpoint and processes the response based
         on the provided parameters.
@@ -61,7 +63,7 @@ class Download:
         async with aiohttp.ClientSession() as session:
             async with session.get(url=url, params=param) as resp:
                 if resp.status == 200:
-                    
+
                     for k in param.keys():
                         if k in types.keys():
                             s_type: dict[str, str] = await resp.json()
@@ -74,12 +76,13 @@ class Download:
                             return s_type
 
                     iter_dict: dict[str, str] = {}
-                    
+
                     if rq_type == "artist":
                         iter_dict = await resp.json()
-                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"]["items"]
-                    
-                    
+                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"][
+                            "items"
+                        ]
+
                     else:
                         for part in await resp.json():
                             if type(part) is list:
@@ -88,5 +91,5 @@ class Download:
 
                             else:
                                 iter_dict = iter_dict | part
-                    
+
                     return iter_dict

@@ -1,11 +1,12 @@
 from .downloads import Download
 
+
 class Album:
 
     async def download_json(self, item_id: str) -> dict[str, str]:
         return await Download().Json(rq_type="album", param={"id": item_id})
 
-    async def metadata(self, resp: dict[str, str]) -> tuple[str]:
+    async def metadata(self, resp: dict[str, str]) -> list[str]:
         streamable: str | bool = resp.get("allowStreaming", False)
         if not streamable:
             return
@@ -17,7 +18,7 @@ class Album:
         copyrights: str = resp.get("copyright", "Not copyrighted")
         explicit: str | bool = resp.get("explicit", False)
         artists: str = " & ".join(artist["name"] for artist in resp.get("artists", []))
-        volume_number: str | None = resp.get("numberOfVolumes")
+        volume_number: str = resp.get("numberOfVolumes")
 
         qualities: dict[str, int] = {
             "LOW": 0,
