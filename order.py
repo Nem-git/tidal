@@ -25,7 +25,7 @@ class Order:
         
         artist_cover_path: str = ""
         
-        print(name)
+        #print(name)
         async with asyncio.TaskGroup() as tg:
             for album_id in album_ids:
                 await asyncio.sleep(delay=0.1)
@@ -68,36 +68,36 @@ class Order:
             track_ids.append(track_id)
 
 #Async
-        async with asyncio.TaskGroup() as tg:
-            for track_id in tqdm.tqdm(iterable=track_ids,
-                            desc=f"{title} ({year})",
-                            unit=" track",
-                            ascii=False):
-                await asyncio.sleep(delay=0.1)
-                tg.create_task(
-                    coro=Order().Track(
-                        item_id=track_id,
-                        quality=quality,
-                        path=path,
-                        total_track_number=track_number,
-                        album_cover_path=album_cover_path,
-                        artist_cover_path=artist_cover_path,
-                    )
-                )
+#        async with asyncio.TaskGroup() as tg:
+#            for track_id in tqdm.tqdm(iterable=track_ids,
+#                            desc=f"{title} ({year})",
+#                            unit=" track",
+#                            ascii=False):
+#                await asyncio.sleep(delay=0.1)
+#                tg.create_task(
+#                    coro=Order().Track(
+#                        item_id=track_id,
+#                        quality=quality,
+#                        path=path,
+#                        total_track_number=track_number,
+#                        album_cover_path=album_cover_path,
+#                        artist_cover_path=artist_cover_path,
+#                    )
+#                )
 
 # Not async
-#        for track_id in tqdm.tqdm(iterable=track_ids,
-#                        desc=f"{title} ({year})",
-#                        unit=" track",
-#                        ascii=False):
-#            await Order().Track(
-#                item_id=track_id,
-#                quality=quality,
-#                path=path,
-#                total_track_number=track_number,
-#                album_cover_path=album_cover_path,
-#                artist_cover_path=artist_cover_path,
-#            )
+        for track_id in tqdm.tqdm(iterable=track_ids,
+                        desc=f"{title} ({year})",
+                        unit=" track",
+                        ascii=False):
+            await Order().Track(
+                item_id=track_id,
+                quality=quality,
+                path=path,
+                total_track_number=track_number,
+                album_cover_path=album_cover_path,
+                artist_cover_path=artist_cover_path,
+            )
 
 
     async def Track(
@@ -159,14 +159,23 @@ class Order:
         )
 
 
-ssss: float = time.time()
-order = Order()
+
 # Les Cowboys Fringants 4907832
 # NWA 9127
 # Michael Jackson 606
-asyncio.run(
-    main=order.Artist(
-        item_id="9127", quality="HI_RES_LOSSLESS", path="../"
-    )
-)
-print(time.time() - ssss)
+
+if __name__ == "__main__":
+    ssss: float = time.time()
+    order = Order()
+    
+    
+    # Download Artist
+    #asyncio.run(main=order.Artist(item_id="606", quality="HI_RES_LOSSLESS", path="../"))
+    
+    # Download Album
+    #asyncio.run(main=order.Album(item_id="606", quality="HI_RES_LOSSLESS", path="../"))
+    
+    # Download Track
+    asyncio.run(main=order.Track(item_id="77686338", quality="HI_RES_LOSSLESS", path="../", total_track_number="14", album_cover_path="", artist_cover_path=""))
+    
+    print(time.time() - ssss)

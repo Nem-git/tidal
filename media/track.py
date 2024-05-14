@@ -15,8 +15,7 @@ class Track:
         )
 
     async def metadata(
-        self, track: dict[str, str], album: dict[str, str]
-    ) -> tuple[str]:
+        self, track: dict[str, str], album: dict[str, str]) -> tuple[str]:
         streamable: str | bool = track.get("allowStreaming", False)
         if not streamable:
             return
@@ -108,24 +107,25 @@ class Track:
             track.tags["TRACKNUMBER"] = str(object=track_number)
             track.tags["DISCNUMBER"] = str(object=volume_number)
 
-            if album_cover_path != "":
-                async with aiofiles.open(file=album_cover_path, mode="rb") as c:
-                    cover = flac.Picture()
-                    cover.data = c.read()
-                    cover.type = PictureType.COVER_FRONT
-                    cover.mime = "image/jpeg"
-                    cover.width = 1280
-                    cover.height = 1280
-                    track.add_picture(picture=cover)
 
-            if artist_cover_path != "":
-                async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
-                    cover = flac.Picture()
-                    cover.data = c.read()
-                    cover.type = PictureType.ARTIST
-                    cover.mime = "image/jpeg"
-                    cover.width = 1280
-                    cover.height = 1280
-                    track.add_picture(picture=cover)
+        if album_cover_path != "":
+            async with aiofiles.open(file=album_cover_path, mode="rb") as c:
+                cover = flac.Picture()
+                cover.data = c.read()
+                cover.type = PictureType.COVER_FRONT
+                cover.mime = "image/jpeg"
+                cover.width = 1280
+                cover.height = 1280
+                track.add_picture(picture=cover)
+
+        if artist_cover_path != "":
+            async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
+                cover = flac.Picture()
+                cover.data = c.read()
+                cover.type = PictureType.ARTIST
+                cover.mime = "image/jpeg"
+                cover.width = 1280
+                cover.height = 1280
+                track.add_picture(picture=cover)
 
         track.save()

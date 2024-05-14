@@ -79,9 +79,7 @@ class Download:
 
                     if rq_type == "artist":
                         iter_dict = await resp.json()
-                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"][
-                            "items"
-                        ]
+                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"]["items"]
 
                     else:
                         for part in await resp.json():
