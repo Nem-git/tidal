@@ -22,13 +22,16 @@ class Download:
         :type param: dict[str, str]
         """
         async with aiohttp.ClientSession() as session:
-            async with session.get(url=url, params=param) as resp:
-                if resp.ok:
-                    async with aiofiles.open(file=f"{path}", mode="wb") as track:
-                        async for chunk in resp.content.iter_chunked(n=4096000):
-                            await track.write(chunk)
-                else:
-                    print(f"Server gave back error {resp.status}")
+            try:
+                async with session.get(url=url, params=param) as resp:
+                    if resp.ok:
+                        async with aiofiles.open(file=f"{path}", mode="wb") as track:
+                            async for chunk in resp.content.iter_chunked(n=4096000):
+                                await track.write(chunk)
+                    else:
+                        print(f"Server gave back error {resp.status}")
+            except:
+                print("Server probably gave back error 403")
 
     async def Json(
         self, rq_type: str, param: dict[str, str]
@@ -79,7 +82,7 @@ class Download:
 
                     if rq_type == "artist":
                         iter_dict = await resp.json()
-                        iter_dict = iter_dict[0]["rows"][0]["modules"][0]["pagedList"]["items"]
+                        iter_dict = iter_dict[1]
 
                     else:
                         for part in await resp.json():

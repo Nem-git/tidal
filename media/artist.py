@@ -14,7 +14,7 @@ class Artist:
 
         album_ids = []
         for album in resp:
-            album_ids.append(album["id"])
+            album_ids.append((int(album["id"]) - 1))
 
         return (
             name,
