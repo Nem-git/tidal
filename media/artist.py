@@ -14,7 +14,8 @@ class Artist:
 
         album_ids = []
         for album in resp:
-            album_ids.append((int(album["id"]) - 1))
+            if album["album"]["id"] not in album_ids:
+                album_ids.append(int(album["album"]["id"]))
 
         return (
             name,

@@ -92,9 +92,7 @@ class Track:
 
             if album_cover_path != "":
                 async with aiofiles.open(file=album_cover_path, mode="rb") as c:
-                    track["covr"] = mp4.MP4Cover(
-                        data=c.read(), imageformat="FORMAT_JPEG"
-                    )
+                    track["covr"] = mp4.MP4Cover(data=await c.read(), imageformat="FORMAT_JPEG")
 
         if file_extension == ".flac":
             track = flac.FLAC(track_path)
@@ -107,22 +105,21 @@ class Track:
             track.tags["TRACKNUMBER"] = str(object=track_number)
             track.tags["DISCNUMBER"] = str(object=volume_number)
 
-
-        if album_cover_path != "":
-            async with aiofiles.open(file=album_cover_path, mode="rb") as c:
+        if artist_cover_path != "":
+            async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
                 cover = flac.Picture()
-                cover.data = c.read()
-                cover.type = PictureType.COVER_FRONT
+                cover.data = await c.read()
+                cover.type = PictureType.ARTIST
                 cover.mime = "image/jpeg"
                 cover.width = 1280
                 cover.height = 1280
                 track.add_picture(picture=cover)
-
-        if artist_cover_path != "":
-            async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
+        
+        if album_cover_path != "":
+            async with aiofiles.open(file=album_cover_path, mode="rb") as c:
                 cover = flac.Picture()
-                cover.data = c.read()
-                cover.type = PictureType.ARTIST
+                cover.data = await c.read()
+                cover.type = PictureType.COVER_FRONT
                 cover.mime = "image/jpeg"
                 cover.width = 1280
                 cover.height = 1280

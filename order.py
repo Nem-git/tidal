@@ -5,6 +5,7 @@ from tools.path import Path
 from media.artist import Artist
 from media.album import Album
 from media.track import Track
+from media.cover import Cover
 
 
 class Order:
@@ -23,7 +24,9 @@ class Order:
             album_ids,
         ) = await artist.metadata(resp=resp)
         
-        artist_cover_path: str = ""
+        if cover_id:
+            artist_cover_path: str = f"{path}{name}/artist.jpg"
+            await self.Cover(id=cover_id, resolution=1280, path=artist_cover_path)
         
         
         # Async
@@ -43,17 +46,18 @@ class Order:
             await Order().Album(item_id=album_id,quality=quality,path=path, artist_cover_path=artist_cover_path)
 
 
-    async def Album(
-        self, item_id: str, quality: str, path: str, artist_cover_path: str
-    ) -> None:
+    async def Album(self, item_id: str, quality: str, path: str, artist_cover_path: str) -> None:
         
         album = Album()
         
         resp: dict[str, str] = await album.download_json(item_id=item_id)
         
-#        if resp["status"] == 404:
-#            print(resp["userMessage"])
-#            return
+        try:
+            if resp["status"] == 404:
+                print(resp["userMessage"])
+                return
+        except:
+            pass
         
         (
             title,
@@ -67,9 +71,12 @@ class Order:
             volume_number,
             tracks,
         ) = await album.metadata(resp=resp)
-    
 
         album_cover_path: str = "" #Just for now
+        
+        if cover_id:
+            album_cover_path: str = f"{path}/cover.jpg"
+            await self.Cover(id=cover_id, resolution=1280, path=album_cover_path)
 
         track_ids: list[str] = []
         for track in tracks:
@@ -77,35 +84,35 @@ class Order:
             track_ids.append(track_id)
 
 # Async
-        async with asyncio.TaskGroup() as tg:
-            for track_id in tqdm.tqdm(iterable=track_ids,
-                            desc=f"{title} ({year})",
-                            unit=" track",
-                            ascii=False):
-                tg.create_task(
-                    coro=Order().Track(
-                        item_id=track_id,
-                        quality=quality,
-                        path=path,
-                        total_track_number=track_number,
-                        album_cover_path=album_cover_path,
-                        artist_cover_path=artist_cover_path,
-                    )
-                )
+#        async with asyncio.TaskGroup() as tg:
+#            for track_id in tqdm.tqdm(iterable=track_ids,
+#                            desc=f"{title} ({year})",
+#                            unit=" track",
+#                            ascii=False):
+#                tg.create_task(
+#                    coro=Order().Track(
+#                        item_id=track_id,
+#                        quality=quality,
+#                        path=path,
+#                        total_track_number=track_number,
+#                        album_cover_path=album_cover_path,
+#                        artist_cover_path=artist_cover_path,
+#                    )
+#                )
 
 # Not async
-#        for track_id in tqdm.tqdm(iterable=track_ids,
-#                        desc=f"{title} ({year})",
-#                        unit=" track",
-#                        ascii=False):
-#            await Order().Track(
-#                item_id=track_id,
-#                quality=quality,
-#                path=path,
-#                total_track_number=track_number,
-#                album_cover_path=album_cover_path,
-#                artist_cover_path=artist_cover_path,
-#            )
+        for track_id in tqdm.tqdm(iterable=track_ids,
+                        desc=f"{title} ({year})",
+                        unit=" track",
+                        ascii=False):
+            await Order().Track(
+                item_id=track_id,
+                quality=quality,
+                path=path,
+                total_track_number=track_number,
+                album_cover_path=album_cover_path,
+                artist_cover_path=artist_cover_path,
+            )
 
 
     async def Track(
@@ -117,6 +124,7 @@ class Order:
         album_cover_path: str,
         artist_cover_path: str,
     ) -> None:
+        
         track = Track()
         
         resp: dict[str, str] = await track.download_json(
@@ -165,6 +173,14 @@ class Order:
             artist_cover_path=artist_cover_path,
         )
 
+    async def Cover(self, id: str, resolution: int, path: str) -> None:
+        
+        cover = Cover()
+        
+        url: str = f"https://resources.tidal.com/images/{id.replace("-", "/")}/{resolution}x{resolution}.jpg"
+        
+        await cover.download_media(path=path, url=url)
+        
 
 
 # Les Cowboys Fringants 4907832
@@ -185,5 +201,8 @@ if __name__ == "__main__":
     
     # Download Track
     #asyncio.run(main=order.Track(item_id="77686338", quality="HI_RES_LOSSLESS", path="../", total_track_number="14", album_cover_path="", artist_cover_path=""))
+    
+    # Download Cover
+    #asyncio.run(main=order.Cover(id="84299843-40fe-487f-ad7d-35ecadb6e37c", resolution=750, path="../cover.jpg"))
     
     print(time.time() - ssss)

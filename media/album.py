@@ -31,7 +31,8 @@ class Album:
 
         tracks: str | None = resp.get("items")
 
-        cover_id = None  # Temporary
+        if resp["cover"]:
+            cover_id = resp["cover"]
 
         return (
             title,
