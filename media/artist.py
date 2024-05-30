@@ -23,3 +23,14 @@ class Artist:
             cover_id,
             album_ids,
         )
+
+    async def search(self, query) -> list:
+        resp = await Download().Search(rq_type="search", param={"a" : query})
+        
+        artists = []
+        
+        for artist in resp[0]["artists"]["items"]:
+            artists.append([artist["id"], artist["name"]])
+            
+        print(artists)
+        return artists

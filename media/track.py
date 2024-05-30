@@ -126,3 +126,20 @@ class Track:
                 track.add_picture(picture=cover)
 
         track.save()
+
+    async def search(self, query):# -> list[Any]:
+        resp = await Download().Search(rq_type="search", param={"s" : query})
+        
+        tracks = []
+        
+        for track in resp["items"]:
+            tracks.append([
+                track["id"],
+                track["title"],
+                track["album"]["title"],
+                track["artist"]["name"],
+            ])
+            
+            
+        print(tracks)
+        return tracks

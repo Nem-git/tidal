@@ -192,9 +192,8 @@ if __name__ == "__main__":
     ssss: float = time.time()
     order = Order()
     
-    
     # Download Artist
-    asyncio.run(main=order.Artist(item_id="9127", quality="HI_RES_LOSSLESS", path="../"))
+    #asyncio.run(main=order.Artist(item_id="9127", quality="HI_RES_LOSSLESS", path="../"))
     
     # Download Album
     #asyncio.run(main=order.Album(item_id="606", quality="HI_RES_LOSSLESS", path="../"))
@@ -204,5 +203,17 @@ if __name__ == "__main__":
     
     # Download Cover
     #asyncio.run(main=order.Cover(id="84299843-40fe-487f-ad7d-35ecadb6e37c", resolution=750, path="../cover.jpg"))
+    
+    # Search Cover
+    #asyncio.run(main=Cover().search(query="NWA"))
+    
+    # Search Artist
+    #asyncio.run(main=Artist().search(query="NWA"))
+
+    # Search Album
+    #asyncio.run(main=Album().search(query="NWA"))
+    
+    # Search Track
+    #asyncio.run(main=Track().search(query="Consequence"))
     
     print(time.time() - ssss)

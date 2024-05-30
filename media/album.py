@@ -46,3 +46,20 @@ class Album:
             volume_number,
             tracks,
         )  # , quality
+    
+    async def search(self, query):
+        resp = await Download().Search(rq_type="search", param={"al" : query})
+        
+        albums = []
+        
+        for album in resp["albums"]["items"]:
+            albums.append([
+                album["id"],
+                album["title"],
+                album["artists"][0]["name"],
+                album["releaseDate"][:4]
+            ])
+            
+            
+        print(albums)
+        return albums

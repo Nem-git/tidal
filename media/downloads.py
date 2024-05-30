@@ -94,3 +94,11 @@ class Download:
                                 iter_dict = iter_dict | part
 
                     return iter_dict
+    
+    
+    async def Search(self, rq_type, param) -> list:
+        url: str = "/".join(("https://tidal.401658.xyz", rq_type))
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=url, params=param) as resp:
+                if resp.status == 200:
+                    return await resp.json()
