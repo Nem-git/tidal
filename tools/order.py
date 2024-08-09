@@ -189,12 +189,11 @@ class Order:
 # Linkin Park 14123
 
 
-def choices() -> None:
+def choices(download_path, download_quality) -> None:
     timer: float = time.time()
     order = Order()
     
-    download_path = "/home/nem/StreamripDownloads/tidal/"
-    download_quality = "HI_RES_LOSSLESS"
+
     
     match sys.argv[1]:
         case "download":
