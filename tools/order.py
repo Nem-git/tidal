@@ -1,11 +1,9 @@
 import asyncio
+import sys
 import tqdm
 import time
-from tools.path import Path
-from media.artist import Artist
-from media.album import Album
-from media.track import Track
-from media.cover import Cover
+from . import Path
+from media import Artist, Album, Track, Cover
 
 
 class Order:
@@ -23,6 +21,8 @@ class Order:
             cover_id,
             album_ids,
         ) = await artist.metadata(resp=resp)
+        
+        artist_cover_path = "" #Just for now
         
         if cover_id:
             artist_cover_path: str = f"{path}{name}/artist.jpg"
@@ -188,32 +188,49 @@ class Order:
 # Michael Jackson 606
 # Linkin Park 14123
 
-if __name__ == "__main__":
-    ssss: float = time.time()
+
+def choices() -> None:
+    timer: float = time.time()
     order = Order()
     
-    # Download Artist
-    #asyncio.run(main=order.Artist(item_id="9127", quality="HI_RES_LOSSLESS", path="../"))
+    download_path = "/home/nem/StreamripDownloads/tidal/"
+    download_quality = "HI_RES_LOSSLESS"
     
-    # Download Album
-    #asyncio.run(main=order.Album(item_id="606", quality="HI_RES_LOSSLESS", path="../"))
-    
-    # Download Track
-    #asyncio.run(main=order.Track(item_id="77686338", quality="HI_RES_LOSSLESS", path="../", total_track_number="14", album_cover_path="", artist_cover_path=""))
-    
-    # Download Cover
-    #asyncio.run(main=order.Cover(id="84299843-40fe-487f-ad7d-35ecadb6e37c", resolution=750, path="../cover.jpg"))
-    
-    # Search Cover
-    #asyncio.run(main=Cover().search(query="NWA"))
-    
-    # Search Artist
-    #asyncio.run(main=Artist().search(query="NWA"))
+    match sys.argv[1]:
+        case "download":
+            match sys.argv[2]:
+                case "artist":
+                    # Download Artist
+                    asyncio.run(main=order.Artist(item_id=sys.argv[3], quality=download_quality, path=download_path))
 
-    # Search Album
-    #asyncio.run(main=Album().search(query="NWA"))
-    
-    # Search Track
-    #asyncio.run(main=Track().search(query="Consequence"))
-    
-    print(time.time() - ssss)
+                case "album":
+                    # Download Album
+                    asyncio.run(main=order.Album(item_id=sys.argv[3], quality=download_quality, path=download_path, artist_cover_path=""))
+
+                case "track":
+                    # Download Track
+                    asyncio.run(main=order.Track(item_id=sys.argv[3], quality=download_quality, path=download_path, total_track_number="14", album_cover_path="", artist_cover_path=""))
+
+                case "cover":
+                    # Download Cover
+                    asyncio.run(main=order.Cover(id=sys.argv[3], resolution=750, path=f"{download_path}/cover.jpg"))
+
+        case "search":
+            match sys.argv[2]:
+                case "artist":
+                    # Search Artist
+                    asyncio.run(main=Artist().search(query=sys.argv[3]))
+
+                case "album":
+                    # Search Album
+                    asyncio.run(main=Album().search(query=sys.argv[3]))
+
+                case "track":
+                    # Search Track
+                    asyncio.run(main=Track().search(query=sys.argv[3]))
+
+                case "cover":
+                    # Search Cover
+                    asyncio.run(main=Cover().search(query=sys.argv[3]))
+
+    print(f"Le programme a pris {time.time() - timer} secondes")

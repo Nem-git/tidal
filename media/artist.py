@@ -1,4 +1,4 @@
-from .downloads import Download
+from . import Download
 
 
 class Artist:
@@ -25,12 +25,12 @@ class Artist:
         )
 
     async def search(self, query) -> list:
-        resp = await Download().Search(rq_type="search", param={"a" : query})
-        
+        resp = await Download().Search(rq_type="search", param={"a": query})
+
         artists = []
-        
+
         for artist in resp[0]["artists"]["items"]:
             artists.append([artist["id"], artist["name"]])
-            
+
         print(artists)
         return artists

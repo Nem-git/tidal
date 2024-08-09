@@ -1,4 +1,4 @@
-from .downloads import Download
+from . import Download
 
 class Cover:
     

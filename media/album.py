@@ -1,4 +1,4 @@
-from .downloads import Download
+from . import Download
 
 
 class Album:
@@ -6,14 +6,14 @@ class Album:
     async def download_json(self, item_id: str) -> dict[str, str]:
         return await Download().Json(rq_type="album", param={"id": item_id})
 
-    async def metadata(self, resp: dict[str, str]) -> list[str]:
+    async def metadata(self, resp: dict[str, str]) -> list[str] | None:
         streamable: str | bool = resp.get("allowStreaming", False)
         if not streamable:
             return
 
         title: str = resp.get("title", "Unknown Album")
         track_number: str | None = resp.get("numberOfTracks")
-        date: str | None = resp.get("releaseDate")
+        date: str = resp.get("releaseDate")
         year: str = date[:4]
         copyrights: str = resp.get("copyright", "Not copyrighted")
         explicit: str | bool = resp.get("explicit", False)

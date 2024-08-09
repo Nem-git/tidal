@@ -1,7 +1,7 @@
 import aiofiles
 from mutagen import flac, mp4
 from mutagen.id3 import PictureType
-from .downloads import Download
+from . import Download
 
 
 class Track:
@@ -15,7 +15,8 @@ class Track:
         )
 
     async def metadata(
-        self, track: dict[str, str], album: dict[str, str]) -> tuple[str]:
+        self, track: dict[str, str], album: dict[str, str]
+    ) -> tuple[str]:
         streamable: str | bool = track.get("allowStreaming", False)
         if not streamable:
             return
@@ -25,7 +26,11 @@ class Track:
         volume_number: str = track.get("volumeNumber", "1")
         copyrights: str = track.get("copyright", "Not copyrighted")
         isrc: str = track.get("isrc", "")
-        artists: str = " & ".join(artist["name"] for artist in track.get("artists"))
+
+        # If you want all your files in the artist folder and only tag with multiple artists, not different folders
+        artists: str = track["artist"]["name"]
+        # If you want to separate the artists in the folders too:
+        # artists: str = " & ".join(artist["name"] for artist in track.get("artists"))
 
         version: str = track.get("version", "1")
         if track.get("version") is not None:
@@ -92,7 +97,9 @@ class Track:
 
             if album_cover_path != "":
                 async with aiofiles.open(file=album_cover_path, mode="rb") as c:
-                    track["covr"] = mp4.MP4Cover(data=await c.read(), imageformat="FORMAT_JPEG")
+                    track["covr"] = mp4.MP4Cover(
+                        data=await c.read(), imageformat="FORMAT_JPEG"
+                    )
 
         if file_extension == ".flac":
             track = flac.FLAC(track_path)
@@ -105,16 +112,16 @@ class Track:
             track.tags["TRACKNUMBER"] = str(object=track_number)
             track.tags["DISCNUMBER"] = str(object=volume_number)
 
-        if artist_cover_path != "":
-            async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
-                cover = flac.Picture()
-                cover.data = await c.read()
-                cover.type = PictureType.ARTIST
-                cover.mime = "image/jpeg"
-                cover.width = 1280
-                cover.height = 1280
-                track.add_picture(picture=cover)
-        
+        # if artist_cover_path != "":
+        #    async with aiofiles.open(file=artist_cover_path, mode="rb") as c:
+        #        cover = flac.Picture()
+        #        cover.data = await c.read()
+        #        cover.type = PictureType.ARTIST
+        #        cover.mime = "image/jpeg"
+        #        cover.width = 1280
+        #        cover.height = 1280
+        #        track.add_picture(picture=cover)
+
         if album_cover_path != "":
             async with aiofiles.open(file=album_cover_path, mode="rb") as c:
                 cover = flac.Picture()
@@ -127,19 +134,20 @@ class Track:
 
         track.save()
 
-    async def search(self, query):# -> list[Any]:
-        resp = await Download().Search(rq_type="search", param={"s" : query})
-        
+    async def search(self, query):  # -> list[Any]:
+        resp = await Download().Search(rq_type="search", param={"s": query})
+
         tracks = []
-        
+
         for track in resp["items"]:
-            tracks.append([
-                track["id"],
-                track["title"],
-                track["album"]["title"],
-                track["artist"]["name"],
-            ])
-            
-            
+            tracks.append(
+                [
+                    track["id"],
+                    track["title"],
+                    track["album"]["title"],
+                    track["artist"]["name"],
+                ]
+            )
+
         print(tracks)
         return tracks
