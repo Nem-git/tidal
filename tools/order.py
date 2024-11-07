@@ -177,7 +177,7 @@ class Order:
         
         cover = Cover()
         
-        url: str = f"https://resources.tidal.com/images/{id.replace("-", "/")}/{resolution}x{resolution}.jpg"
+        url: str = f"https://resources.tidal.com/images/{id.replace('-', '/')}/{resolution}x{resolution}.jpg"
         
         await cover.download_media(path=path, url=url)
         
@@ -232,4 +232,4 @@ def choices(download_path, download_quality) -> None:
                     # Search Cover
                     asyncio.run(main=Cover().search(query=sys.argv[3]))
 
-    print(f"Le programme a pris {time.time() - timer} secondes")
+    print(f"The program took {time.time() - timer} seconds to execute")
