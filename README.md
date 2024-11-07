@@ -8,7 +8,7 @@ git clone https://github.com/Nem-git/tidal.git
 ### Installing the dependencies
 ```
 cd tidal/
-pip -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Arguments
